@@ -22,12 +22,13 @@ const Model = () => {
   // ✅ Traverse and find the bone named "Bone"
   useEffect(() => {
     scene.traverse((child) => {
-      if ((child as any).isBone && child.name === "Bone") {
-        console.log("🎯 Found the bone:", child.name);
+      if ('isBone' in child && child.name === "Bone") {
         headBoneRef.current = child as Bone;
+        console.log("🎯 Found the bone:", child.name);
       }
+    
       if (child.name === "Cube") {
-        bodyRef.current = child as Object3D;
+        bodyRef.current = child;
         console.log("🧍 Body mesh found:", child.name);
       }
     });
