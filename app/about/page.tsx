@@ -1,7 +1,6 @@
 "use client";
 
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
 import Butterfly from "../components/Butterfly"; // Adjust the import path as needed
 
 export default function DJPage() {

@@ -2,11 +2,8 @@
 import { Canvas, useThree } from "@react-three/fiber";
 import { FisheyeEffect } from "./FisheyeEffect";
 import { Environment, OrbitControls } from "@react-three/drei";
-import { EffectComposer, ChromaticAberration, Vignette } from "@react-three/postprocessing";
-import { BlendFunction } from "postprocessing";
 import { useEffect } from "react";
 import { extend } from "@react-three/fiber";
-import { useMemo } from "react";
 
 import Model from "./Model";
 import Speaker from "./Speaker";
