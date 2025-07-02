@@ -3,6 +3,7 @@ import { useRef, useState, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import { Object3D, Bone } from "three";
+import { useRouter } from "next/navigation";
 
 const Model = () => {
   const { scene } = useGLTF("/models/me.glb");
@@ -10,7 +11,12 @@ const Model = () => {
   const headBoneRef = useRef<Bone | null>(null);
   const bodyRef = useRef<Object3D | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const router = useRouter();
 
+
+const handleClick = () => {
+  router.push("/about"); // or wherever you want to send the user
+};
   // ✅ Orient model properly
   useEffect(() => {
     modelRef.current = scene;
@@ -56,7 +62,7 @@ const Model = () => {
 
   });
 
-  return <primitive object={scene} scale={0.3} position={[0, -2, 0]} />;
+  return (<primitive object={scene} scale={0.3} position={[0, -2, 0]}     onClick={handleClick} />);
 };
 
 export default Model;
