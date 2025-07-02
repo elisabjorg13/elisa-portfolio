@@ -19,19 +19,19 @@ export default function DJPage() {
       title: "DJ ÓK mix 002 - Drif Radio",
       link: "https://www.youtube.com/watch?v=EVXhIASN9iE&list=RDEVXhIASN9iE&start_radio=1&t=485s",
       stream:
-      "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/SpotiDownloader.com+-+Feel+Me+-+Sassy+009.mp3",
+        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/SpotiDownloader.com+-+Feel+Me+-+Sassy+009.mp3",
     },
     {
       title: "DJ ÓK mix 001 - Drif Radio",
       link: "https://www.youtube.com/watch?v=dIoA7rcR2Io&list=RDdIoA7rcR2Io&start_radio=1&t=1739s",
       stream:
-      "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/SpotiDownloader.com+-+Feel+Me+-+Sassy+009.mp3",
+        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/SpotiDownloader.com+-+Feel+Me+-+Sassy+009.mp3",
     },
     {
       title: "DJ ÓK Drums pilled mix - Egregore",
       link: "https://soundcloud.com/egreg-re/dj-ok-drum-pilled-fevrier-2025?si=680048eb7ba9453baeec2e3be30692ee&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
       stream:
-      "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/SpotiDownloader.com+-+Feel+Me+-+Sassy+009.mp3",
+        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/SpotiDownloader.com+-+Feel+Me+-+Sassy+009.mp3",
     },
     {
       title: "DJ ÓK Cellar mix",
@@ -57,19 +57,19 @@ export default function DJPage() {
       title: "Danser avec lui (feat Jon Edvard)",
       link: "https://soundcloud.com/elysium-001/danser-avec-lui-feat-eddi?si=c69728f78bc742348881de884ebe8765&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
       stream:
-      "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/SpotiDownloader.com+-+Feel+Me+-+Sassy+009.mp3",
+        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/SpotiDownloader.com+-+Feel+Me+-+Sassy+009.mp3",
     },
     {
       title: "Dns (ft. DJÓTTAR & Elisa Björg)",
       link: "https://soundcloud.com/user-162986744/dns-im-wokeft-djottar-elisa-bjorg?si=c726062719ee45c5bf9de93ff0280ce9&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
       stream:
-      "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/SpotiDownloader.com+-+Feel+Me+-+Sassy+009.mp3",
+        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/SpotiDownloader.com+-+Feel+Me+-+Sassy+009.mp3",
     },
     {
       title: "Dns Cursed Mix (ft. DJÓTTAR & Elisa Björg)",
       link: "https://soundcloud.com/user-162986744/dns-im-woke-cursed?si=f670137edf984c259f3cbe3af4dd5e3d&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
       stream:
-      "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/SpotiDownloader.com+-+Feel+Me+-+Sassy+009.mp3",
+        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/SpotiDownloader.com+-+Feel+Me+-+Sassy+009.mp3",
     },
     {
       title: "3gs",
@@ -96,13 +96,6 @@ export default function DJPage() {
   const playAudio = () => {
     if (audioRef.current) {
       audioRef.current.play();
-    }
-  };
-  const stopAudio = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0; // reset to start
-      setIsPlaying(false);
     }
   };
   return (
@@ -172,7 +165,8 @@ export default function DJPage() {
             {tracks.map((track, index) => (
               <div key={index} className="flex items-center gap-4">
                 {/* Play Button as Image */}
-                <button onClick={() => {
+                <button
+                  onClick={() => {
                     if (currentItem.title === track.title) {
                       togglePlayback();
                     } else {
@@ -182,7 +176,8 @@ export default function DJPage() {
                         setIsPlaying(true);
                       }, 100); // ensure audio element updates before play
                     }
-                  }}>
+                  }}
+                >
                   <img
                     src={`/images/${
                       isPlaying && currentItem.title === track.title

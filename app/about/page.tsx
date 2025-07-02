@@ -11,7 +11,7 @@ export default function DJPage() {
           <h1>About me</h1>
           <p>
             I am a 22 yr old programmer and UX designer. I graduated with a
-            bachelor's degree in software engineering from the University of
+            bachelors degree in software engineering from the University of
             Iceland in June 2023, after taking my last semester abroad in
             Madrid. I grew up in London but later moved to Iceland, where I am
             situated now.
