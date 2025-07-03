@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
+  --background: #4c4c4c;
   --foreground: #171717;
 }
 
@@ -14,9 +14,13 @@ body {
   font-family: 'Times New Roman', Times, serif;
 }
 h1 {
-  color: #E94DCC;
+  color: #00f9ff;
   font-family: "Pinyon Script", cursive;
   font-size:2rem;
-
-
+}
+h2 {
+  color: #00f9ff;
+}
+p{
+  color:#00f9ff
 }

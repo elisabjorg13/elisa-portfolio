@@ -1,11 +1,18 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useGLTF } from "@react-three/drei";
 import { Object3D } from "three";
+import { useRouter } from "next/navigation";
 
 const Speaker = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
   const { scene } = useGLTF("/models/Speakers.glb");
   const speakerRef = useRef<Object3D | null>(null);
+  const [hovered, setHovered] = useState(false);
+  const router = useRouter();
+  const handleClick = () => {
+    router.push("/dj");
+  };
+
 
   return (
     <primitive
@@ -13,7 +20,10 @@ const Speaker = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
       object={scene}
       position={position}
       rotation={rotation}
-      scale={0.45}
+      onClick={handleClick}
+      onPointerOver={() => setHovered(true)}
+      onPointerOut={() => setHovered(false)}
+      scale={hovered ? 0.47: 0.45}
     />
   );
 };

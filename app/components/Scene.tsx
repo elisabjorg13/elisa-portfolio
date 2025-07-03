@@ -22,7 +22,7 @@ const CameraSetup = () => {
   const { camera } = useThree();
 
   useEffect(() => {
-    camera.position.set(0, 0, -7);
+    camera.position.set(0, 0, -8.5);
     camera.lookAt(0, 0, 0);
   }, [camera]);
 
@@ -39,13 +39,13 @@ const Scene = () => {
       
       {/* Your 3D Objects */}
       <Model />
-      <Speaker position={[-4.5, -1.5, -2]} rotation={[0, Math.PI - 2.5, 0]} />
-      <Speaker2 position={[3, -1.5, -3.5]} rotation={[0, Math.PI - 0.5, 0]} />
+      <Speaker position={[-7, -1.5, 0]} rotation={[0, Math.PI - 2.5, 0]} />
+      <Speaker2 position={[3, -1.5, -4.5]} rotation={[0, Math.PI - 0.5, 0]} />
       <BlenderMuseum position={[5, -1.5, 4]} rotation={[0, 1, 0]} />
       <Computer1 position={[-5, -2.3, 6]} rotation={[0, Math.PI + 2.6, 0]} />
       <Butterfly position={[2, 3, 0]} rotation={[Math.PI*4, Math.PI-5.5,0]}scale={0.6} />
       <Controller position={[1, -2, -3]} rotation={[0, Math.PI - 1.8, 0]} />
-      <Paper  position={[-3, -2.5, -2]} rotation={[0, 0.4, -0.1]} ></Paper>
+      <Paper  position={[-3, -2.5, -4]} rotation={[0, 0.4, 0]} ></Paper>
       <Stairway position={[0, -2.83, 1.5]} rotation={[0, -1.8, 0]}></Stairway>
       <OrbitControls enablePan={false} enableZoom={true} enableRotate={true} />
 

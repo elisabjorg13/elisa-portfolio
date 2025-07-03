@@ -13,6 +13,8 @@ export default {
         foreground: "var(--foreground)",
 
         customPink: "#E94DCC",
+        customBlue:"#00f9ff",
+        customGreen:"#00ffC2"
       },
     },
   },

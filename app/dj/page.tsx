@@ -31,7 +31,7 @@ export default function DJPage() {
       title: "DJ ÓK Drums pilled mix - Egregore",
       link: "https://soundcloud.com/egreg-re/dj-ok-drum-pilled-fevrier-2025?si=680048eb7ba9453baeec2e3be30692ee&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
       stream:
-        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/SpotiDownloader.com+-+Feel+Me+-+Sassy+009.mp3",
+        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/Music/DJ+OK+-+Drum+Pilled+(Fe%CC%81vrier+2025).mp3",
     },
     {
       title: "DJ ÓK Cellar mix",
@@ -82,6 +82,12 @@ export default function DJPage() {
   const [currentItem, setCurrentItem] = useState<TrackItem>(mixes[0]);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const isCurrentMix = mixes.some((mix) => mix.title === currentItem.title);
+  const activeList = isCurrentMix ? mixes : tracks;
+  const currentIndex = activeList.findIndex(
+    (item) => item.title === currentItem.title
+  );
+
   const togglePlayback = () => {
     if (!audioRef.current) return;
 
@@ -98,17 +104,60 @@ export default function DJPage() {
       audioRef.current.play();
     }
   };
+  const stopAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setIsPlaying(false);
+    }
+  };
+
+  const goToPrevious = () => {
+    if (currentIndex > 0) {
+      const prevItem = activeList[currentIndex - 1];
+      setCurrentItem(prevItem);
+      setTimeout(() => {
+        playAudio();
+        setIsPlaying(true);
+      }, 100);
+    }
+  };
+
+  const goToNext = () => {
+    if (currentIndex < activeList.length - 1) {
+      const nextItem = activeList[currentIndex + 1];
+      setCurrentItem(nextItem);
+      setTimeout(() => {
+        playAudio();
+        setIsPlaying(true);
+      }, 100);
+    }
+  };
   return (
-    <main className=" min-h-screen p-20 w-full bg-white flex flex-col gap-10 items-start justify-start">
+    <main className=" min-h-screen p-20 w-full flex flex-col gap-10 items-start justify-start">
       <div className="flex flex-col gap-3">
         <h2 className="text-lg font-medium mb-2">{currentItem.title}</h2>
-        <button onClick={togglePlayback}>
-          <img
-            src={`/images/${isPlaying ? "pauseButton.png" : "playButton.png"}`}
-            alt="Play"
-            className="w-10 h-10"
-          />
-        </button>
+        <div className="flex flex-row gap-4">
+          <button onClick={stopAudio}>
+            <img src="/images/stopButton.png" className="w-10 h-10" />
+          </button>
+          <button onClick={goToPrevious}>
+            <img src="/images/backButton.png" className="w-10 h-10" />
+          </button>
+          <button onClick={togglePlayback}>
+            <img
+              src={`/images/${
+                isPlaying ? "pauseButton.png" : "playButton.png"
+              }`}
+              alt="Play"
+              className="w-10 h-10"
+            />
+          </button>
+          <button onClick={goToNext}>
+            <img src="/images/nextButton.png" className="w-10 h-10" />
+          </button>
+        </div>
+
         <audio ref={audioRef} src={currentItem.stream} preload="auto" />
       </div>
       <div className="flex flex-col gap-8">
@@ -149,7 +198,7 @@ export default function DJPage() {
                   href={mix.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-black hover:text-customPink transition-colors duration-200"
+                  className="text-customBlue hover:text-white transition-colors duration-200"
                 >
                   {mix.title}
                 </a>
@@ -194,7 +243,7 @@ export default function DJPage() {
                   href={track.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-black hover:text-customPink transition-colors duration-200"
+                  className="text-customBlue hover:text-white transition-colors duration-200"
                 >
                   {track.title}
                 </a>
@@ -203,13 +252,13 @@ export default function DJPage() {
           </div>
         </div>
       </div>
-      <div className="absolute bottom-0 right-0 pointer-events-none w-1/2 -rotate-6 ">
+      {/* <div className="absolute bottom-0 right-0 pointer-events-none w-1/2 -rotate-6 ">
         <img
           src="/images/MUSIC.png"
           alt="music notes"
           className="w-full h-auto"
         />
-      </div>
+      </div> */}
     </main>
   );
 }

@@ -12,11 +12,11 @@ const Model = () => {
   const bodyRef = useRef<Object3D | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const router = useRouter();
+  const [hovered, setHovered] = useState(false);
 
-
-const handleClick = () => {
-  router.push("/about"); // or wherever you want to send the user
-};
+  const handleClick = () => {
+    router.push("/about"); // or wherever you want to send the user
+  };
   // ✅ Orient model properly
   useEffect(() => {
     modelRef.current = scene;
@@ -28,11 +28,11 @@ const handleClick = () => {
   // ✅ Traverse and find the bone named "Bone"
   useEffect(() => {
     scene.traverse((child) => {
-      if ('isBone' in child && child.name === "Bone") {
+      if ("isBone" in child && child.name === "Bone") {
         headBoneRef.current = child as Bone;
         console.log("🎯 Found the bone:", child.name);
       }
-    
+
       if (child.name === "Cube") {
         bodyRef.current = child;
         console.log("🧍 Body mesh found:", child.name);
@@ -57,12 +57,18 @@ const handleClick = () => {
       headBoneRef.current.rotation.y = mousePos.x * 1.2;
       headBoneRef.current.rotation.x = mousePos.y * 0.8;
     }
-
-
-
   });
 
-  return (<primitive object={scene} scale={0.3} position={[0, -2, 0]}     onClick={handleClick} />);
+  return (
+    <primitive
+      object={scene}
+      onClick={handleClick}
+      onPointerOver={() => setHovered(true)}
+      onPointerOut={() => setHovered(false)}
+      position={[0, -2, 0]}
+      scale={hovered ? 0.33 : 0.3}
+    />
+  );
 };
 
 export default Model;
