@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Image from "next/image"; 
 
 export default function DJPage() {
   type TrackItem = {
@@ -49,7 +50,7 @@ export default function DJPage() {
       title: "ELYSIUM Rich aunt mix",
       link: "https://soundcloud.com/elysium-001/mixtest?si=6f390427c2634809925bd6ba3d3f6a01&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
       stream:
-        "https://www.youtube.com/watch?v=eIiaiu_8EAc&list=RDeIiaiu_8EAc&start_radio=1&t=2307s",
+        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/Music/ELYSIUM+01+-+RICH+AUNT+MIX+(JERSEY+CLUB+SPECIAL).mp3",
     },
   ];
   const tracks = [
@@ -57,29 +58,29 @@ export default function DJPage() {
       title: "Danser avec lui (feat Jon Edvard)",
       link: "https://soundcloud.com/elysium-001/danser-avec-lui-feat-eddi?si=c69728f78bc742348881de884ebe8765&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
       stream:
-        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/SpotiDownloader.com+-+Feel+Me+-+Sassy+009.mp3",
+        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/Music/SpotiDownloader.com+-+Danser+avec+lui+-+Jon+Edvard.mp3",
     },
     {
       title: "Dns (ft. DJÓTTAR & Elisa Björg)",
       link: "https://soundcloud.com/user-162986744/dns-im-wokeft-djottar-elisa-bjorg?si=c726062719ee45c5bf9de93ff0280ce9&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
       stream:
-        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/SpotiDownloader.com+-+Feel+Me+-+Sassy+009.mp3",
+        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/Music/SpotiDownloader.com+-+DnS+(I'm+Woke)+-+Jon+Edvard.mp3",
     },
     {
       title: "Dns Cursed Mix (ft. DJÓTTAR & Elisa Björg)",
       link: "https://soundcloud.com/user-162986744/dns-im-woke-cursed?si=f670137edf984c259f3cbe3af4dd5e3d&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
       stream:
-        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/SpotiDownloader.com+-+Feel+Me+-+Sassy+009.mp3",
+        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/Music/SpotiDownloader.com+-+DnS+-+Cursed+-+Jon+Edvard.mp3",
     },
     {
       title: "3gs",
       link: "https://open.spotify.com/track/3V54Fgf8DZuKka7DkfBrm8?si=7328689a36ef495a",
       stream:
-        "https://www.youtube.com/watch?v=eIiaiu_8EAc&list=RDeIiaiu_8EAc&start_radio=1&t=2307s",
+        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/Music/SpotiDownloader.com+-+3gs+-+ELYSIUM.mp3",
     },
   ];
 
-  const [currentItem, setCurrentItem] = useState<TrackItem>(mixes[0]);
+  const [currentItem, setCurrentItem] = useState<TrackItem>(tracks[0]);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const isCurrentMix = mixes.some((mix) => mix.title === currentItem.title);
@@ -134,131 +135,61 @@ export default function DJPage() {
     }
   };
   return (
-    <main className=" min-h-screen p-20 w-full flex flex-col gap-10 items-start justify-start">
-      <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-medium mb-2">{currentItem.title}</h2>
-        <div className="flex flex-row gap-4">
-          <button onClick={stopAudio}>
-            <img src="/images/stopButton.png" className="w-10 h-10" />
-          </button>
-          <button onClick={goToPrevious}>
-            <img src="/images/backButton.png" className="w-10 h-10" />
-          </button>
-          <button onClick={togglePlayback}>
-            <img
-              src={`/images/${
-                isPlaying ? "pauseButton.png" : "playButton.png"
-              }`}
-              alt="Play"
-              className="w-10 h-10"
-            />
-          </button>
-          <button onClick={goToNext}>
-            <img src="/images/nextButton.png" className="w-10 h-10" />
-          </button>
+    <main className="w-screen vh-100 h-screen flex items-center justify-center">
+      <div className="bg-[#d9d9d9] w-full h-full  p-4 flex flex-col justify-between">
+        {/* Screen */}
+        <div className="bg-white rounded-md p-4 h-[60%] overflow-auto text-center flex flex-col items-center justify-center">
+          {tracks.map((track, index) => (
+           <p
+           key={index}
+           className={`text-3xl ${
+             track.title === currentItem.title ? "text-gray-400" : "text-black"
+           }`}
+         >
+           {track.title}
+         </p>
+         
+          ))}
         </div>
 
-        <audio ref={audioRef} src={currentItem.stream} preload="auto" />
-      </div>
-      <div className="flex flex-col gap-8">
-        <div className="flex flex-col gap-4">
-          <div>
-            <h1>Mixes</h1>
-          </div>
-          <div className="flex flex-col gap-2">
-            {mixes.map((mix, index) => (
-              <div key={index} className="flex items-center gap-4">
-                {/* Play Button as Image */}
-                <button
-                  onClick={() => {
-                    if (currentItem.title === mix.title) {
-                      togglePlayback();
-                    } else {
-                      setCurrentItem(mix);
-                      setTimeout(() => {
-                        playAudio();
-                        setIsPlaying(true);
-                      }, 100); // ensure audio element updates before play
-                    }
-                  }}
-                >
-                  <img
-                    src={`/images/${
-                      isPlaying && currentItem.title === mix.title
-                        ? "pauseButton.png"
-                        : "playButton.png"
-                    }`}
-                    alt="Play"
-                    className="w-5 h-5 hover:opacity-80 transition-opacity"
-                  />
-                </button>
+        {/* Controller */}
+        <div className="relative flex flex-col items-center justify-center">
+          {/* Top Buttons */}
+          {/* <div className="absolute top-[-20px] left-[40px] w-10 h-10 bg-gray-300 rounded-full"></div>
+      <div className="absolute top-[-20px] right-[40px] w-10 h-10 bg-gray-300 rounded-full"></div> */}
 
-                {/* Hyperlinked Title */}
-                <a
-                  href={mix.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-customBlue hover:text-white transition-colors duration-200"
-                >
-                  {mix.title}
-                </a>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="flex flex-col gap-4">
-          <div>
-            <h1>Tracks</h1>
-          </div>
-          <div className="flex flex-col gap-2">
-            {tracks.map((track, index) => (
-              <div key={index} className="flex items-center gap-4">
-                {/* Play Button as Image */}
-                <button
-                  onClick={() => {
-                    if (currentItem.title === track.title) {
-                      togglePlayback();
-                    } else {
-                      setCurrentItem(track);
-                      setTimeout(() => {
-                        playAudio();
-                        setIsPlaying(true);
-                      }, 100); // ensure audio element updates before play
-                    }
-                  }}
-                >
-                  <img
-                    src={`/images/${
-                      isPlaying && currentItem.title === track.title
-                        ? "pauseButton.png"
-                        : "playButton.png"
-                    }`}
-                    alt="Play"
-                    className="w-5 h-5 hover:opacity-80 transition-opacity"
-                  />
-                </button>
-
-                {/* Hyperlinked Title */}
-                <a
-                  href={track.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-customBlue hover:text-white transition-colors duration-200"
-                >
-                  {track.title}
-                </a>
-              </div>
-            ))}
+          {/* Click Wheel */}
+          <div className="w-60 h-60 bg-white rounded-full flex flex-col items-center justify-center gap-2 text-center relative">
+            <p className="text-lg text-gray-500 absolute top-2">HOME</p>
+            <button className="absolute left-2 text-xl" onClick={goToPrevious}>
+            <Image
+                src="/images/backButtonGray.png" // your icon path
+                alt="Play"
+                width={28}
+                height={28}
+              />
+            </button>
+            <button className="absolute right-2 text-xl" onClick={goToNext}>
+            <Image
+                src="/images/skipButtonGray.png" // your icon path
+                alt="Play"
+                width={28}
+                height={28}
+              />
+            </button>
+            <button className="absolute ml-2 bottom-2" onClick={togglePlayback}>
+              <Image
+                src={`/images/${isPlaying ? "pauseButtonGray.png" : "playButtonGray.png"}`}
+                alt="Play"
+                width={24}
+                height={24}
+              />
+            </button>
+            <div className="w-20 h-20 bg-[#d9d9d9] rounded-full shadow-inner" />
           </div>
         </div>
       </div>
-      {/* <div className="absolute bottom-0 right-0 pointer-events-none w-1/2 -rotate-6 ">
-        <img
-          src="/images/MUSIC.png"
-          alt="music notes"
-          className="w-full h-auto"
-        />
-      </div> */}
+      <audio ref={audioRef} src={currentItem.stream} preload="auto" />
     </main>
   );
 }
