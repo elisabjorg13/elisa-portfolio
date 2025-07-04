@@ -105,13 +105,13 @@ export default function DJPage() {
       audioRef.current.play();
     }
   };
-  const stopAudio = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      setIsPlaying(false);
-    }
-  };
+  // const stopAudio = () => {
+  //   if (audioRef.current) {
+  //     audioRef.current.pause();
+  //     audioRef.current.currentTime = 0;
+  //     setIsPlaying(false);
+  //   }
+  // };
 
   const goToPrevious = () => {
     if (currentIndex > 0) {
