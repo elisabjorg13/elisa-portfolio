@@ -9,7 +9,6 @@ import { Select } from "@react-three/postprocessing";
 const Speaker = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
   const { scene } = useGLTF("/models/Speakers.glb");
   const speakerRef = useRef<Object3D | null>(null);
-  const hoveredRef = useRef(false)
   const [hovered, setHovered] = useState(false);
   const router = useRouter();
   const handleClick = () => {

@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 
 const Model = () => {
   const { scene } = useGLTF("/models/me.glb");
-  const modelRef = useRef<Object3D | null>(null);
   const headBoneRef = useRef<Bone | null>(null);
   const bodyRef = useRef<Object3D | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });

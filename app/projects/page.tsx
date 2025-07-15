@@ -182,7 +182,7 @@ export default function projectsPage() {
               in the tech industry. I then took another similar course in Madrid
               when I re-iterated the business model and pitch, after getting
               artists and clients to take a number of surveys in order to get
-              more in depth knowledge on inkUp's target market. I also designed
+              more in depth knowledge on inkUp s target market. I also designed
               the whole front end logic for the application using Figma and
               using a mock database, implemented a mock version of the
               application using Adalo, which is accesible here.

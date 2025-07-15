@@ -9,14 +9,12 @@ const Controller = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
   const gltf = useGLTF("/models/computer2.glb");
   const router = useRouter();
 
-  // Ensure the scene exists
-  if (!gltf || !gltf.scene) return null;
-
-  // Clone and memoize scene ONCE
-  const scene = useMemo(() => gltf.scene.clone(), []);
-
   const controllerRef = useRef(null);
   const [hovered, setHovered] = useState(false);
+
+  // Memoize only if gltf.scene exists
+  const scene = useMemo(() => gltf?.scene?.clone?.(), [gltf?.scene]);
+
   useEffect(() => {
     if (hovered) {
       document.body.style.cursor = 'url("/images/fairyWandTEST.png") 32 32, auto';
@@ -24,9 +22,13 @@ const Controller = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
       document.body.style.cursor = 'url("/images/fairyWandUP.png") 32 32, auto';
     }
   }, [hovered]);
+
   const handleClick = () => {
     router.push("/dj");
   };
+
+  // If the model hasn't loaded yet
+  if (!scene) return null;
 
   return (
     <Select enabled={hovered}>
@@ -44,7 +46,6 @@ const Controller = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
   );
 };
 
-// Preload outside component to avoid hydration issues
 useGLTF.preload("/models/computer2.glb");
 
 export default Controller;
