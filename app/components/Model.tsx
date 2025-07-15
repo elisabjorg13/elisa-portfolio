@@ -17,15 +17,6 @@ const Model = () => {
   const handleClick = () => {
     router.push("/about"); // or wherever you want to send the user
   };
-  // ✅ Orient model properly
-  useEffect(() => {
-    modelRef.current = scene;
-    if (modelRef.current) {
-      modelRef.current.rotation.set(0, 0, 0); // Rotate to face front
-    }
-  }, [scene]);
-
-  // ✅ Traverse and find the bone named "Bone"
   useEffect(() => {
     scene.traverse((child) => {
       if ("isBone" in child && child.name === "Bone") {
@@ -50,6 +41,13 @@ const Model = () => {
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
+  useEffect(() => {
+    if (hovered) {
+      document.body.style.cursor = 'url("/images/fairyWandTEST.png") 32 32, auto';
+    } else {
+      document.body.style.cursor = 'url("/images/fairyWandUP.png") 32 32, auto';
+    }
+  }, [hovered]);
 
   // ✅ Rotate the bone
   useFrame(() => {
@@ -63,10 +61,11 @@ const Model = () => {
     <primitive
       object={scene}
       onClick={handleClick}
+      position={[-1.1, -2, -1]}
+      rotation={[0,0.6,0]}
+      scale={ 0.4}
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
-      position={[0, -2, 0]}
-      scale={hovered ? 0.33 : 0.3}
     />
   );
 };

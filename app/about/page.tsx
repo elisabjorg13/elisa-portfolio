@@ -3,7 +3,7 @@
 import { Canvas } from "@react-three/fiber";
 import Butterfly from "../components/Butterfly"; // Adjust the import path as needed
 
-export default function DJPage() {
+export default function aboutPage() {
   return (
     <main className="min-h-screen w-full flex flex-col items-start justify-start">
       <div className="max-w-[1200px] px-20 py-20 flex flex-col gap-[4rem] w-3/4">

@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --background: #4c4c4c;
+  --background: #ffff;
   --foreground: #171717;
 }
 
@@ -12,15 +12,19 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: 'Times New Roman', Times, serif;
+
+  /* 🪄 Add custom cursor */
+  /* cursor: pointer !important; */
+
 }
 h1 {
-  color: #00f9ff;
+  color: #6A00FF;
   font-family: "Pinyon Script", cursive;
   font-size:2rem;
 }
 h2 {
-  color: #00f9ff;
+  color: #6A00FF;
 }
 p{
-  color:#00f9ff
+  color:#7C7C7C
 }

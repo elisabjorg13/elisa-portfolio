@@ -1,9 +1,11 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Image from "next/image"; 
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function DJPage() {
+  const router = useRouter();
   type TrackItem = {
     title: string;
     link: string;
@@ -79,13 +81,13 @@ export default function DJPage() {
         "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/Music/SpotiDownloader.com+-+3gs+-+ELYSIUM.mp3",
     },
   ];
+  const combinedList = [...mixes, ...tracks];
 
   const [currentItem, setCurrentItem] = useState<TrackItem>(tracks[0]);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const isCurrentMix = mixes.some((mix) => mix.title === currentItem.title);
-  const activeList = isCurrentMix ? mixes : tracks;
-  const currentIndex = activeList.findIndex(
+
+  const currentIndex = combinedList.findIndex(
     (item) => item.title === currentItem.title
   );
 
@@ -105,17 +107,14 @@ export default function DJPage() {
       audioRef.current.play();
     }
   };
-  // const stopAudio = () => {
-  //   if (audioRef.current) {
-  //     audioRef.current.pause();
-  //     audioRef.current.currentTime = 0;
-  //     setIsPlaying(false);
-  //   }
-  // };
+
+  const handleClickHome = () => {
+    router.push("/"); // or wherever you want to send the user
+  };
 
   const goToPrevious = () => {
     if (currentIndex > 0) {
-      const prevItem = activeList[currentIndex - 1];
+      const prevItem = combinedList[currentIndex - 1];
       setCurrentItem(prevItem);
       setTimeout(() => {
         playAudio();
@@ -125,8 +124,8 @@ export default function DJPage() {
   };
 
   const goToNext = () => {
-    if (currentIndex < activeList.length - 1) {
-      const nextItem = activeList[currentIndex + 1];
+    if (currentIndex < combinedList.length - 1) {
+      const nextItem = combinedList[currentIndex + 1];
       setCurrentItem(nextItem);
       setTimeout(() => {
         playAudio();
@@ -134,22 +133,69 @@ export default function DJPage() {
       }, 100);
     }
   };
+
   return (
     <main className="w-screen vh-100 h-screen flex items-center justify-center">
       <div className="bg-[#d9d9d9] w-full h-full  p-4 flex flex-col justify-between">
         {/* Screen */}
-        <div className="bg-white rounded-md p-4 h-[60%] overflow-auto text-center flex flex-col items-center justify-center">
-          {tracks.map((track, index) => (
-           <p
-           key={index}
-           className={`text-3xl ${
-             track.title === currentItem.title ? "text-gray-400" : "text-black"
-           }`}
-         >
-           {track.title}
-         </p>
-         
-          ))}
+        <div className="relative bg-white rounded-md p-4 h-[60%] overflow-auto text-left space-y-4">
+          <Image
+            src="/images/MUSIC.png" // <-- Replace with your image path
+            alt="Background Art"
+            fill
+            className="pointer-events-none object-contain opacity-30 z-0 absolute right-0 bottom-0"
+          />
+          <div className="relative z-10">
+            <div>
+              <h1 className="text-customPink mb-2">First Mixes</h1>
+              <ul className="space-y-1">
+                {mixes.map((mix, index) => (
+                  <li
+                    key={`mix-${index}`}
+                    className={`text-lg cursor-pointer ${
+                      mix.title === currentItem?.title
+                        ? "text-gray-400"
+                        : "text-customGray"
+                    }`}
+                    onClick={() => {
+                      setCurrentItem(mix);
+                      setTimeout(() => {
+                        playAudio();
+                        setIsPlaying(true);
+                      }, 100);
+                    }}
+                  >
+                    {mix.title}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h1 className="text-customPink mt-4 mb-2">Tracks</h1>
+              <ul className="space-y-1">
+                {tracks.map((track, index) => (
+                  <li
+                    key={`track-${index}`}
+                    className={`text-lg cursor-pointer ${
+                      track.title === currentItem?.title
+                        ? "text-gray-400"
+                        : "text-customGray"
+                    }`}
+                    onClick={() => {
+                      setCurrentItem(track);
+                      setTimeout(() => {
+                        playAudio();
+                        setIsPlaying(true);
+                      }, 100);
+                    }}
+                  >
+                    {track.title}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
 
         {/* Controller */}
@@ -160,9 +206,14 @@ export default function DJPage() {
 
           {/* Click Wheel */}
           <div className="w-60 h-60 bg-white rounded-full flex flex-col items-center justify-center gap-2 text-center relative">
-            <p className="text-lg text-gray-500 absolute top-2">HOME</p>
+            <button
+              className="text-lg  absolute top-2"
+              onClick={handleClickHome}
+            >
+              <p className="text-gray-500">HOME</p>
+            </button>
             <button className="absolute left-2 text-xl" onClick={goToPrevious}>
-            <Image
+              <Image
                 src="/images/backButtonGray.png" // your icon path
                 alt="Play"
                 width={28}
@@ -170,7 +221,7 @@ export default function DJPage() {
               />
             </button>
             <button className="absolute right-2 text-xl" onClick={goToNext}>
-            <Image
+              <Image
                 src="/images/skipButtonGray.png" // your icon path
                 alt="Play"
                 width={28}
@@ -179,7 +230,9 @@ export default function DJPage() {
             </button>
             <button className="absolute ml-2 bottom-2" onClick={togglePlayback}>
               <Image
-                src={`/images/${isPlaying ? "pauseButtonGray.png" : "playButtonGray.png"}`}
+                src={`/images/${
+                  isPlaying ? "pauseButtonGray.png" : "playButtonGray.png"
+                }`}
                 alt="Play"
                 width={24}
                 height={24}

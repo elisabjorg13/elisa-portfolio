@@ -1,30 +1,41 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGLTF } from "@react-three/drei";
 import { Object3D } from "three";
 import { useRouter } from "next/navigation";
 
+import { Select } from "@react-three/postprocessing";
+
 const Speaker2 = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
   const { scene } = useGLTF("/models/Speakers2.glb");
-  const speakerRef = useRef<Object3D | null>(null);
+  const speaker2Ref = useRef<Object3D | null>(null);
   const [hovered, setHovered] = useState(false);
   const router = useRouter();
   const handleClick = () => {
     router.push("/dj");
   };
+  useEffect(() => {
+    if (speaker2Ref.current) {
+      speaker2Ref.current.traverse((child) => {
+        child.layers.enable(0) // make sure it's renderable in postprocessing layer
+      })
+    }
+  }, [])
 
 
   return (
-    <primitive
-    ref={speakerRef}
-      object={scene}
-      position={position}
-      rotation={rotation}
-      onClick={handleClick}
-      onPointerOver={() => setHovered(true)}
-      onPointerOut={() => setHovered(false)}
-      scale={hovered ? 0.48: 0.45}
-    />
+    <Select enabled={hovered}>
+      <primitive
+        ref={speaker2Ref}
+        object={scene}
+        position={position}
+        rotation={rotation}
+        onClick={handleClick}
+        onPointerOver={() => !hovered && setHovered(true)}
+        onPointerOut={() => hovered && setHovered(false)}
+        scale={0.45}
+      />
+    </Select>
   );
 };
 

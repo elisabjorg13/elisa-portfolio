@@ -14,7 +14,9 @@ export default {
 
         customPink: "#E94DCC",
         customBlue:"#00f9ff",
-        customGreen:"#00ffC2"
+        customGreen:"#00ffC2",
+        customPurple:"#6A00FF",
+        customGray:"#7C7C7C"
       },
     },
   },
