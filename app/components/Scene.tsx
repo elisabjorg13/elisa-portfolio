@@ -1,22 +1,10 @@
 "use client";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 import { FisheyeEffect } from "./FisheyeEffect";
 import { Environment, OrbitControls } from "@react-three/drei";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { extend } from "@react-three/fiber";
 
-import { BlendFunction } from "postprocessing";
-import { Color } from "three";
-import * as THREE from "three";
-import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
-import { OutlinePass } from "three/examples/jsm/postprocessing/OutlinePass";
-
-import {
-  Selection,
-  Select,
-  EffectComposer,
-  Outline,
-} from "@react-three/postprocessing";
 
 import Model from "./Model";
 import Speaker from "./Speaker";
