@@ -38,19 +38,33 @@ const CameraSetup = () => {
 
 const Scene = () => {
   const { active } = useProgress();
-  const showLoading = active;
-  // Animated loading dots
   const [dotCount, setDotCount] = useState(1);
+  const [showLoading, setShowLoading] = useState(true);
+  const [minTimePassed, setMinTimePassed] = useState(false);
+
   useEffect(() => {
-    if (showLoading) {
-      const interval = setInterval(() => {
-        setDotCount((prev) => (prev % 3) + 1);
-      }, 500);
-      return () => clearInterval(interval);
-    } else {
-      setDotCount(1);
+    let interval = setInterval(() => {
+      setDotCount((prev) => (prev % 3) + 1);
+    }, 200);
+
+    // Always show at least 600ms of animation
+    setMinTimePassed(false);
+    const minTimeout = setTimeout(() => setMinTimePassed(true), 600);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(minTimeout);
+    };
+  }, [active]);
+
+  useEffect(() => {
+    if (!active && minTimePassed) {
+      setShowLoading(false);
+    } else if (active) {
+      setShowLoading(true);
     }
-  }, [showLoading]);
+  }, [active, minTimePassed]);
+
   return (
     <div style={{ width: "100vw", height: "100vh", position: "relative" }}>
       {showLoading && (
@@ -66,12 +80,32 @@ const Scene = () => {
           justifyContent: "center",
           zIndex: 1000,
         }}>
-          <div style={{
-            fontSize: "2rem",
-            fontFamily: "'Times New Roman', Times, serif",
-            color: "#6A00FF"
-          }}>
-            {`Loading${'.'.repeat(dotCount)}`}
+          <div
+            style={{
+              fontSize: "2rem",
+              fontFamily: "'Times New Roman', Times, serif",
+              color: "#E94DCC",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              letterSpacing: "0.05em",
+            }}
+          >
+            <span style={{ minWidth: "7ch", textAlign: "right" }}>Loading</span>
+            <span
+              style={{
+                marginLeft: "0.2em",
+                minWidth: "3ch",
+                display: "inline-block",
+                textAlign: "left",
+                fontFamily: "'Times New Roman', Times, serif"
+              }}
+            >
+              <span style={{ opacity: dotCount >= 1 ? 1 : 0 }}>.</span>
+              <span style={{ opacity: dotCount >= 2 ? 1 : 0 }}>.</span>
+              <span style={{ opacity: dotCount >= 3 ? 1 : 0 }}>.</span>
+            </span>
           </div>
         </div>
       )}
