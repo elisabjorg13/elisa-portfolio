@@ -110,7 +110,6 @@ const Scene = () => {
               fontFamily: "'Times New Roman', Times, serif",
               color: "#E94DCC",
               display: "flex",
-              flexDirection: "row",
               alignItems: "center",
               justifyContent: "center",
               letterSpacing: "0.05em",
@@ -118,6 +117,7 @@ const Scene = () => {
           >
             <span style={{ minWidth: "7ch", textAlign: "right" }}>Loading</span>
             <span
+              className="dot-anim"
               style={{
                 marginLeft: "0.2em",
                 minWidth: "3ch",
@@ -125,11 +125,7 @@ const Scene = () => {
                 textAlign: "left",
                 fontFamily: "'Times New Roman', Times, serif"
               }}
-            >
-              <span style={{ opacity: dotCount >= 1 ? 1 : 0 }}>.</span>
-              <span style={{ opacity: dotCount >= 2 ? 1 : 0 }}>.</span>
-              <span style={{ opacity: dotCount >= 3 ? 1 : 0 }}>.</span>
-            </span>
+            ></span>
           </div>
         </div>
       )}

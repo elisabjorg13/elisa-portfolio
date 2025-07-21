@@ -29,3 +29,15 @@ h2 {
 p{
   color:#7C7C7C
 }
+
+.dot-anim::after {
+  content: '';
+  animation: dots 1s steps(3, end) infinite;
+}
+
+@keyframes dots {
+  0%   { content: ''; }
+  33%  { content: '.'; }
+  66%  { content: '..'; }
+  100% { content: '...'; }
+}
