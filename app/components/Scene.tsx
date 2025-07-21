@@ -89,6 +89,50 @@ const Scene = () => {
         background: "#b3c7e6", // or your preferred background color
       }}
     >
+      {showLoading && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            background: "#b3c7e6", // or your preferred color
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+          }}
+        >
+          <div
+            style={{
+              fontSize: "2rem",
+              fontFamily: "'Times New Roman', Times, serif",
+              color: "#E94DCC",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              letterSpacing: "0.05em",
+            }}
+          >
+            <span style={{ minWidth: "7ch", textAlign: "right" }}>Loading</span>
+            <span
+              style={{
+                marginLeft: "0.2em",
+                minWidth: "3ch",
+                display: "inline-block",
+                textAlign: "left",
+                fontFamily: "'Times New Roman', Times, serif"
+              }}
+            >
+              <span style={{ opacity: dotCount >= 1 ? 1 : 0 }}>.</span>
+              <span style={{ opacity: dotCount >= 2 ? 1 : 0 }}>.</span>
+              <span style={{ opacity: dotCount >= 3 ? 1 : 0 }}>.</span>
+            </span>
+          </div>
+        </div>
+      )}
       <Canvas
         style={{
           width: isMobile ? "100vw" : "100vw",
