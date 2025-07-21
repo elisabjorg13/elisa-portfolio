@@ -5,7 +5,6 @@ import { Environment, OrbitControls } from "@react-three/drei";
 import { useEffect, useState } from "react";
 import { extend } from "@react-three/fiber";
 import { useProgress } from "@react-three/drei";
-import MeLillyPad from "./MeLilyPad";
 
 import Model from "./Model";
 import Speaker from "./Speaker";

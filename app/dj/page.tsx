@@ -175,7 +175,7 @@ export default function DJPage() {
                 </button>
                 <h1 className="text-customPink mb-2 text-xl font-bold">{menu === 'ELYSIUM' ? 'Tracks' : 'Mixes'}</h1>
                 <ul className="space-y-1">
-                  {combinedList.map((item, index) => (
+                  {combinedList.map((item) => (
                     <li
                       key={item.title}
                       className={`text-lg cursor-pointer ${item.title === currentItem?.title ? 'text-gray-400' : 'text-customGray'}`}

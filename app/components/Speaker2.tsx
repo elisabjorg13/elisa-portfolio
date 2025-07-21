@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useRef} from "react";
 import { useGLTF } from "@react-three/drei";
 import { Object3D } from "three";
 import { useRouter } from "next/navigation";
