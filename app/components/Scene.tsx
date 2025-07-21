@@ -18,6 +18,18 @@ import Paper from "./Paper";
 import Stairway from "./Stairway";
 extend({ FisheyeEffect });
 
+// Simple device detection hook
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 700 || /Mobi|Android/i.test(navigator.userAgent));
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+  return isMobile;
+}
+
 const CameraSetup = () => {
   const { camera } = useThree();
 
@@ -41,6 +53,7 @@ const Scene = () => {
   const [dotCount, setDotCount] = useState(1);
   const [showLoading, setShowLoading] = useState(true);
   const [minTimePassed, setMinTimePassed] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -109,7 +122,16 @@ const Scene = () => {
           </div>
         </div>
       )}
-      <Canvas style={{ width: "100vw", height: "100vh" }}>
+      <Canvas
+        style={{
+          width: isMobile ? "100vw" : "100vw",
+          height: isMobile ? "60vh" : "100vh",
+          maxWidth: isMobile ? 500 : undefined,
+          margin: isMobile ? "0 auto" : undefined,
+          display: "block"
+        }}
+        dpr={isMobile ? 1 : 2}
+      >
         <ambientLight intensity={0.5} />
         <directionalLight position={[5, 5, 5]} />
         <Environment files="/images/sky.hdr" background />
