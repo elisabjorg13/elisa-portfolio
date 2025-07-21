@@ -50,22 +50,16 @@ const CameraSetup = () => {
 
 const Scene = () => {
   const { active } = useProgress();
-  const [dotCount, setDotCount] = useState(1);
   const [showLoading, setShowLoading] = useState(true);
   const [minTimePassed, setMinTimePassed] = useState(false);
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setDotCount((prev) => (prev % 3) + 1);
-    }, 200);
-
     // Always show at least 600ms of animation
     setMinTimePassed(false);
     const minTimeout = setTimeout(() => setMinTimePassed(true), 600);
 
     return () => {
-      clearInterval(interval);
       clearTimeout(minTimeout);
     };
   }, [active]);
