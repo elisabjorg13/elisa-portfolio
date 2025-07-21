@@ -140,7 +140,7 @@ const Scene = () => {
           maxWidth: isMobile ? 500 : undefined,
           display: "block",
         }}
-        dpr={isMobile ? 1 : 2}
+        dpr={Math.min(window.devicePixelRatio, 2)}
       >
         <ambientLight intensity={0.5} />
         <directionalLight position={[5, 5, 5]} />
