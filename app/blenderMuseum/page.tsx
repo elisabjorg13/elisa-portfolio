@@ -6,7 +6,7 @@ import MeLillyPad from "../components/MeLilyPad";
 
 export default function blenderMuseumPage() {
   return (
-    <main className="relative w-screen h-screen overflow-hidden bg-white">
+    <main className="relative w-screen h-screen overflow-hidden bg-white cursor-pointer">
       <h1 className="absolute top-10 left-10 pointer-events-none">
         Blender museum
       </h1>

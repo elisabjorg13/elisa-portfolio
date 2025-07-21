@@ -5,7 +5,7 @@ import Butterfly from "../components/Butterfly"; // Adjust the import path as ne
 
 export default function aboutPage() {
   return (
-    <main className="min-h-screen w-full flex flex-col items-start justify-start">
+    <main className="min-h-screen w-full flex flex-col items-start justify-start cursor-pointer">
       <div className="max-w-[1200px] px-20 py-20 flex flex-col gap-[4rem] w-3/4">
         <div>
           <h1>About me</h1>

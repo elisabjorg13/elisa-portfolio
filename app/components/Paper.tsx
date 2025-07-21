@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import { useGLTF } from "@react-three/drei";
 import { Object3D, Mesh } from "three";
 import { Select } from "@react-three/postprocessing";
+import { Text } from "@react-three/drei";
 
 const Paper = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
   const { scene } = useGLTF("/models/paper.glb");
@@ -18,14 +19,7 @@ const Paper = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
     });
   }, []);
 
-  // Cursor switching side-effect
-  useEffect(() => {
-    if (hovered) {
-      document.body.style.cursor = 'url("/images/fairyWandTEST.png") 32 32, auto';
-    } else {
-      document.body.style.cursor = 'url("/images/fairyWandUP.png") 32 32, auto';
-    }
-  }, [hovered]);
+  // Removed useEffect for cursor logic
 
   const handleClick = () => {
     window.open(
@@ -36,16 +30,32 @@ const Paper = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
 
   return (
     <Select enabled={hovered}>
-      <primitive
-        ref={paperRef}
-        object={sceneClone}
-        position={position}
-        rotation={rotation}
-        scale={0.7}
-        onPointerOver={() => setHovered(true)}
-        onPointerOut={() => setHovered(false)}
-        onClick={handleClick}
-      />
+      <>
+        <primitive
+          ref={paperRef}
+          object={sceneClone}
+          position={position}
+          rotation={rotation}
+          scale={0.7}
+          onPointerOver={() => setHovered(true)}
+          onPointerOut={() => setHovered(false)}
+          onClick={handleClick}
+        />
+        {hovered && (
+          <Text
+            position={[position[0], position[1] + 1.2, position[2]]}
+            fontSize={0.4}
+            color="#E94DCC"
+            anchorY="bottom"
+            anchorX="center"
+            outlineColor="#fff"
+            outlineWidth={0.02}
+            rotation={[0, Math.PI, 0]}
+          >
+            Resumé
+          </Text>
+        )}
+      </>
     </Select>
   );
 };

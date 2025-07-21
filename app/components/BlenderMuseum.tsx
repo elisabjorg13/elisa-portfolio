@@ -5,6 +5,7 @@ import { Object3D } from "three";
 
 import { useRouter } from "next/navigation";
 import { Select } from "@react-three/postprocessing";
+import { Text } from "@react-three/drei";
 
 const BlenderMuseum = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
   const { scene } = useGLTF("/models/blendermuseum.glb");
@@ -14,29 +15,37 @@ const BlenderMuseum = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
   const handleClick = () => {
     router.push("/blenderMuseum");
   };
-  useEffect(() => {
-    if (hovered) {
-      document.body.style.cursor = 'url("/images/fairyWandTEST.png") 32 32, auto';
-    } else {
-      document.body.style.cursor = 'url("/images/fairyWandUP.png") 32 32, auto';
-    }
-  }, [hovered]);
-
-
+  // Removed useEffect for cursor logic
 
 
   return (
     <Select enabled={hovered}>
-      <primitive
-        ref={blenderMuseumRef}
-        object={scene}
-        position={position}
-        rotation={rotation}
-        onClick={handleClick}
-        onPointerOver={() => !hovered && setHovered(true)}
-        onPointerOut={() => hovered && setHovered(false)}
-        scale={0.5}
-      />
+      <>
+        <primitive
+          ref={blenderMuseumRef}
+          object={scene}
+          position={position}
+          rotation={rotation}
+          onClick={handleClick}
+          onPointerOver={() => !hovered && setHovered(true)}
+          onPointerOut={() => hovered && setHovered(false)}
+          scale={0.5}
+        />
+        {hovered && (
+          <Text
+            position={[position[0], position[1] + 3.5, position[2]]}
+            fontSize={0.4}
+            color="#E94DCC"
+            anchorY="bottom"
+            anchorX="center"
+            outlineColor="#fff"
+            outlineWidth={0.02}
+            rotation={[0, Math.PI, 0]}
+          >
+            Blender Museum
+          </Text>
+        )}
+      </>
     </Select>
   );
 };

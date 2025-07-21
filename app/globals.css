@@ -12,6 +12,7 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: 'Times New Roman', Times, serif;
+  cursor: url('/images/fairyWandUP.png') 69 0, auto;
 
   /* 🪄 Add custom cursor */
   /* cursor: pointer !important; */

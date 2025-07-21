@@ -11,6 +11,7 @@ export default function DJPage() {
     link: string;
     stream: string;
   };
+  const [menu, setMenu] = useState<'main' | 'ELYSIUM' | 'DJ ÓK'>('main');
   const mixes = [
     {
       title: "DJ örsi jersey club mix - Drif Radio",
@@ -81,7 +82,7 @@ export default function DJPage() {
         "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/Music/SpotiDownloader.com+-+3gs+-+ELYSIUM.mp3",
     },
   ];
-  const combinedList = [...mixes, ...tracks];
+  const combinedList = menu === 'ELYSIUM' ? tracks : menu === 'DJ ÓK' ? mixes : [];
 
   const [currentItem, setCurrentItem] = useState<TrackItem>(tracks[0]);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -135,108 +136,157 @@ export default function DJPage() {
   };
 
   return (
-    <main className="w-screen vh-100 h-screen flex items-center justify-center">
+    <main className="w-screen vh-100 h-screen flex items-center justify-center" style={{ cursor: 'pointer' }}>
       <div className="bg-[#d9d9d9] w-full h-full  p-4 flex flex-col justify-between">
         {/* Screen */}
-        <div className="relative bg-white rounded-md p-4 h-[60%] overflow-auto text-left space-y-4">
+        <div className="relative bg-white rounded-md p-4 h-[60%] overflow-auto text-left space-y-4 flex flex-col justify-start items-start">
           <Image
-            src="/images/MUSIC.png" // <-- Replace with your image path
+            src="/images/MUSIC.png"
             alt="Background Art"
             fill
             className="pointer-events-none object-contain opacity-30 z-0 absolute right-0 bottom-0"
           />
-          <div className="relative z-10">
-            <div>
-              <h1 className="text-customPink mb-2">First Mixes</h1>
-              <ul className="space-y-1">
-                {mixes.map((mix, index) => (
-                  <li
-                    key={`mix-${index}`}
-                    className={`text-lg cursor-pointer ${
-                      mix.title === currentItem?.title
-                        ? "text-gray-400"
-                        : "text-customGray"
-                    }`}
-                    onClick={() => {
-                      setCurrentItem(mix);
-                      setTimeout(() => {
-                        playAudio();
-                        setIsPlaying(true);
-                      }, 100);
-                    }}
-                  >
-                    {mix.title}
-                  </li>
-                ))}
+          <div className="relative z-10 w-full">
+            {menu === 'main' && (
+              <ul className="space-y-2 mt-4 w-full">
+                <li
+                  className="text-lg cursor-pointer px-4 py-2 rounded flex items-center justify-between bg-customPink text-white font-bold"
+                  onClick={() => setMenu('ELYSIUM')}
+                >
+                  ELYSIUM
+                  <span className="ml-2">▶</span>
+                </li>
+                <li
+                  className="text-lg cursor-pointer px-4 py-2 rounded flex items-center justify-between bg-customBlue text-white font-bold mt-2"
+                  onClick={() => setMenu('DJ ÓK')}
+                >
+                  DJ ÓK
+                  <span className="ml-2">▶</span>
+                </li>
               </ul>
-            </div>
-
-            <div>
-              <h1 className="text-customPink mt-4 mb-2">Tracks</h1>
-              <ul className="space-y-1">
-                {tracks.map((track, index) => (
-                  <li
-                    key={`track-${index}`}
-                    className={`text-lg cursor-pointer ${
-                      track.title === currentItem?.title
-                        ? "text-gray-400"
-                        : "text-customGray"
-                    }`}
-                    onClick={() => {
-                      setCurrentItem(track);
-                      setTimeout(() => {
-                        playAudio();
-                        setIsPlaying(true);
-                      }, 100);
-                    }}
-                  >
-                    {track.title}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            )}
+            {menu !== 'main' && (
+              <>
+                <button
+                  className="mb-2 text-customGray text-sm underline"
+                  onClick={() => setMenu('main')}
+                >
+                  ← Back
+                </button>
+                <h1 className="text-customPink mb-2 text-xl font-bold">{menu === 'ELYSIUM' ? 'Tracks' : 'Mixes'}</h1>
+                <ul className="space-y-1">
+                  {combinedList.map((item, index) => (
+                    <li
+                      key={item.title}
+                      className={`text-lg cursor-pointer ${item.title === currentItem?.title ? 'text-gray-400' : 'text-customGray'}`}
+                      onClick={() => {
+                        setCurrentItem(item);
+                        setTimeout(() => {
+                          playAudio();
+                          setIsPlaying(true);
+                        }, 100);
+                      }}
+                    >
+                      {item.title}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
           </div>
         </div>
 
         {/* Controller */}
         <div className="relative flex flex-col items-center justify-center">
-          {/* Top Buttons */}
-          {/* <div className="absolute top-[-20px] left-[40px] w-10 h-10 bg-gray-300 rounded-full"></div>
-      <div className="absolute top-[-20px] right-[40px] w-10 h-10 bg-gray-300 rounded-full"></div> */}
+          {/* Circular Insta/Cloud buttons above the wheel */}
 
           {/* Click Wheel */}
           <div className="w-60 h-60 bg-white rounded-full flex flex-col items-center justify-center gap-2 text-center relative">
+            {/* Insta and Cloud buttons on the wheel, flanking HOME */}
             <button
-              className="text-lg  absolute top-2"
-              onClick={handleClickHome}
+              className={`w-16 h-16 rounded-full flex items-center justify-center shadow font-bold text-xs absolute left-0 top-4 z-10
+                ${menu === 'ELYSIUM'
+                  ? 'bg-white border-2 border-customPink text-customPink hover:bg-customPink hover:text-white transition-colors cursor-pointer font-serif'
+                  : menu === 'DJ ÓK'
+                  ? 'bg-white border-2 border-customBlue text-customBlue hover:bg-customBlue hover:text-white transition-colors cursor-pointer font-serif'
+                  : 'bg-white border-2 border-gray-300 text-gray-400 hover:border-gray-400 hover:text-gray-500 transition-colors font-serif'}
+              `}
+              style={{ transform: 'translate(-50%, 0)', textTransform: 'uppercase', letterSpacing: '0.1em', pointerEvents: menu === 'ELYSIUM' || menu === 'DJ ÓK' ? 'auto' : 'none', padding: '0.75rem' }}
+              onClick={() => {
+                if (menu === 'ELYSIUM') {
+                  window.open('https://www.instagram.com/', '_blank');
+                } else if (menu === 'DJ ÓK') {
+                  window.open('https://www.instagram.com/djokokokokokok/', '_blank');
+                }
+              }}
             >
-              <p className="text-gray-500">HOME</p>
+              Insta
             </button>
-            <button className="absolute left-2 text-xl" onClick={goToPrevious}>
+            <button
+              className={`w-16 h-16 rounded-full flex items-center justify-center shadow font-bold text-xs absolute right-0 top-4 z-10
+                ${menu === 'ELYSIUM'
+                  ? 'bg-white border-2 border-customPink text-customPink hover:bg-customPink hover:text-white transition-colors cursor-pointer font-serif'
+                  : menu === 'DJ ÓK'
+                  ? 'bg-white border-2 border-customBlue text-customBlue hover:bg-customBlue hover:text-white transition-colors cursor-pointer font-serif'
+                  : 'bg-white border-2 border-gray-300 text-gray-400 hover:border-gray-400 hover:text-gray-500 transition-colors font-serif'}
+              `}
+              style={{ transform: 'translate(50%, 0)', textTransform: 'uppercase', letterSpacing: '0.1em', pointerEvents: menu === 'ELYSIUM' || menu === 'DJ ÓK' ? 'auto' : 'none', padding: '0.75rem' }}
+              onClick={() => {
+                if (menu === 'ELYSIUM') {
+                  window.open('https://soundcloud.com/elysium-001', '_blank');
+                } else if (menu === 'DJ ÓK') {
+                  window.open('https://soundcloud.com/djok-889666396', '_blank');
+                }
+              }}
+            >
+              Cloud
+            </button>
+            {/* Disable prev, next, play/pause, back when on main menu */}
+            <button
+              className="absolute left-2 text-xl"
+              onClick={goToPrevious}
+              disabled={menu === 'main'}
+              style={menu === 'main' ? { opacity: 0.5, pointerEvents: 'none' } : {}}
+            >
               <Image
-                src="/images/backButtonGray.png" // your icon path
+                src="/images/backButtonGray.png"
                 alt="Play"
                 width={28}
                 height={28}
               />
             </button>
-            <button className="absolute right-2 text-xl" onClick={goToNext}>
+            <button
+              className="absolute right-2 text-xl"
+              onClick={goToNext}
+              disabled={menu === 'main'}
+              style={menu === 'main' ? { opacity: 0.5, pointerEvents: 'none' } : {}}
+            >
               <Image
-                src="/images/skipButtonGray.png" // your icon path
+                src="/images/skipButtonGray.png"
                 alt="Play"
                 width={28}
                 height={28}
               />
             </button>
-            <button className="absolute ml-2 bottom-2" onClick={togglePlayback}>
+            <button
+              className="absolute ml-2 bottom-2"
+              onClick={togglePlayback}
+              disabled={menu === 'main'}
+              style={menu === 'main' ? { opacity: 0.5, pointerEvents: 'none' } : {}}
+            >
               <Image
-                src={`/images/${
-                  isPlaying ? "pauseButtonGray.png" : "playButtonGray.png"
-                }`}
+                src={`/images/${isPlaying ? "pauseButtonGray.png" : "playButtonGray.png"}`}
                 alt="Play"
                 width={24}
                 height={24}
               />
+            </button>
+            {/* HOME always enabled */}
+            <button
+              className="text-lg absolute top-2 left-1/2 -translate-x-1/2"
+              onClick={handleClickHome}
+            >
+              <p className="text-gray-500">HOME</p>
             </button>
             <div className="w-20 h-20 bg-[#d9d9d9] rounded-full shadow-inner" />
           </div>

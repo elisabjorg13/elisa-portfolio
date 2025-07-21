@@ -4,6 +4,7 @@ import { useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import { Object3D, Bone } from "three";
 import { useRouter } from "next/navigation";
+import { Text } from "@react-three/drei";
 
 const Model = () => {
   const { scene } = useGLTF("/models/me.glb");
@@ -40,13 +41,6 @@ const Model = () => {
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
-  useEffect(() => {
-    if (hovered) {
-      document.body.style.cursor = 'url("/images/fairyWandTEST.png") 32 32, auto';
-    } else {
-      document.body.style.cursor = 'url("/images/fairyWandUP.png") 32 32, auto';
-    }
-  }, [hovered]);
 
   // ✅ Rotate the bone
   useFrame(() => {
@@ -57,15 +51,31 @@ const Model = () => {
   });
 
   return (
-    <primitive
-      object={scene}
-      onClick={handleClick}
-      position={[-1.1, -2, -1]}
-      rotation={[0,0.6,0]}
-      scale={ 0.4}
-      onPointerOver={() => setHovered(true)}
-      onPointerOut={() => setHovered(false)}
-    />
+    <>
+      <primitive
+        object={scene}
+        onClick={handleClick}
+        position={[-1.1, -2, -1]}
+        rotation={[0,0.6,0]}
+        scale={ 0.4}
+        onPointerOver={() => setHovered(true)}
+        onPointerOut={() => setHovered(false)}
+      />
+      {hovered && (
+        <Text
+          position={[-1.1, -1.5 + 3.5, -1]}
+          fontSize={0.4}
+          color="#E94DCC"
+          anchorY="bottom"
+          anchorX="center"
+          outlineColor="#fff"
+          outlineWidth={0.02}
+          rotation={[0, Math.PI+0.5, 0]}
+        >
+          About
+        </Text>
+      )}
+    </>
   );
 };
 

@@ -3,12 +3,12 @@ import Image from "next/image";
 
 export default function projectsPage() {
   return (
-    <main className="min-h-screen w-full max-w-5xl mx-auto flex flex-col items-start justify-start mt-4 gap-4">
-      <div className="ml-10 mr-10 mb-10 flex flex-col gap-10">
+    <main className="min-h-screen w-full mx-auto flex flex-col items-start justify-start mt-4 gap-20 cursor-pointer">
+      <div className="ml-20 mr-10 mb-10 flex flex-col gap-10">
         <h1 className="">Projects - Content</h1>
         <div>
           <h2>Work From Home studios</h2>
-          <p>
+          <p className="mr-24">
             Work From Home Studios I cofounded with Katrín Hersisdóttir. It is a
             web design studio where I implement websites for various brands and
             artists.
@@ -49,12 +49,13 @@ export default function projectsPage() {
               Katrinhers.is
             </a>
             <div className="flex flex-col gap-4 items-center">
-              <Image
-                src="/images/katrinWebsite.png" // Must be in the public/ folder
-                alt="Magic Wand"
+              <video
+                src="/images/whitebgmockupcompressed.mp4" // Must be in the public/ folder
                 width={900}
                 height={700}
-                className="rounded shadow-lg h-auto"
+                autoPlay
+                muted
+                loop
               />
             </div>
           </div>
@@ -78,7 +79,7 @@ export default function projectsPage() {
                 className=" h-auto"
               />
             </div>
-            <div className="text-left">
+            <div className="text-justify ml-8 mr-24">
               <p>
                 During my time working for indo I gained experience in
                 programming with Flutter, which was used to develop the front
@@ -112,36 +113,45 @@ export default function projectsPage() {
                 className=" h-auto"
               />
             </div>
-            <div className="text-left">
-              <h2 className="text-xl">Motivation</h2>
-              <p>
-                Pikkoló strives for a more sustainable future in grocery
-                shopping by letting users pick up grocery orders in stations
-                located near them, thus minimizing air pollution and encouraging
-                users to be less dependent on daily car travels. Me and another
-                student were approached by a professor who was at the time
-                teaching us machine learning and operational programming and
-                given the opportunity to implement a visual solution for
-                pikkoló, calculating where to situate their pick up stations.
-              </p>
-              <h2 className="text-xl">Method</h2>
-              <p>
-                Linear regression was performed on data we found appropriate for
-                the project, sourced from the geographic information system of
-                Reykjavik and the GPS system TomTom. Data analization and Linear
-                Regression was performed using R and mapped onto a map of
-                Reykjavik, creating a simple and understandeable solution that
-                Pikkoló uses for potential business opportunities.
-              </p>
-              <h2 className="text-xl">Outcome</h2>
-              <p>
-                Linear regression was performed on data we found appropriate for
-                the project, sourced from the geographic information system of
-                Reykjavik and the GPS system TomTom. Data analization and Linear
-                Regression was performed using R and mapped onto a map of
-                Reykjavik, creating a simple and understandeable solution that
-                Pikkoló uses for potential business opportunities.
-              </p>
+            <div className="text-justify flex flex-col gap-8 mr-24">
+              <div className="flex flex-col gap-2">
+                <p>Motivation</p>
+                <p>
+                  Pikkoló strives for a more sustainable future in grocery
+                  shopping by letting users pick up grocery orders in stations
+                  located near them, thus minimizing air pollution and
+                  encouraging users to be less dependent on daily car travels.
+                  Me and another student were approached by a professor who was
+                  at the time teaching us machine learning and operational
+                  programming and given the opportunity to implement a visual
+                  solution for pikkoló, calculating where to situate their pick
+                  up stations.
+                </p>
+              </div>
+              <div className="flex flex-col gap-2">
+                <p>Method</p>
+                <p>
+                  Linear regression was performed on data we found appropriate
+                  for the project, sourced from the geographic information
+                  system of Reykjavik and the GPS system TomTom. Data
+                  analization and Linear Regression was performed using R and
+                  mapped onto a map of Reykjavik, creating a simple and
+                  understandeable solution that Pikkoló uses for potential
+                  business opportunities.
+                </p>
+              </div>
+              <div className="flex flex-col gap-2">
+                <p>Outcome</p>
+                <p>
+                  Linear regression was performed on data we found appropriate
+                  for the project, sourced from the geographic information
+                  system of Reykjavik and the GPS system TomTom. Data
+                  analization and Linear Regression was performed using R and
+                  mapped onto a map of Reykjavik, creating a simple and
+                  understandeable solution that Pikkoló uses for potential
+                  business opportunities.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -164,29 +174,35 @@ export default function projectsPage() {
                 className=" h-auto"
               />
             </div>
-            <p>
-              inkUp is a startup idea that was born when I took an
-              entrepreneurially focused course in the University of Iceland. It
-              is a platform that connects tattoo artists to potential customers
-              in order to make the tattoo industry less underground than it is.
-              The idea was born when me and my friends were going on a trip to
-              Berlin and wanted to get tattoos, but had nowhere to look since we
-              didnt know anyone that could advise us on where to look. That is
-              when I thought that having a platform that connects where clients
-              can get an overview on all artists and their portfolios in their
-              nearby area would benefit both parties. Artists would get more
-              exposure and clients would have easier access to the art they wish
-              for, since getting a tattoo is a lifelong decision. In the course
-              I took in Iceland I made a business model for inkUp along with a
-              business pitch that was pitched to investors and important people
-              in the tech industry. I then took another similar course in Madrid
-              when I re-iterated the business model and pitch, after getting
-              artists and clients to take a number of surveys in order to get
-              more in depth knowledge on inkUp s target market. I also designed
-              the whole front end logic for the application using Figma and
-              using a mock database, implemented a mock version of the
-              application using Adalo, which is accesible here.
-            </p>
+            <div className=" text-justify flex flex-col gap-8 ml-8 mr-24">
+              <p className="">
+                inkUp is a startup idea that was born when I took an
+                entrepreneurially focused course in the University of Iceland.
+                It is a platform that connects tattoo artists to potential
+                customers in order to make the tattoo industry less underground
+                than it is. The idea was born when me and my friends were going
+                on a trip to Berlin and wanted to get tattoos, but had nowhere
+                to look since we didnt know anyone that could advise us on where
+                to look. That is when I thought that having a platform that
+                connects where clients can get an overview on all artists and
+                their portfolios in their nearby area would benefit both
+                parties. Artists would get more exposure and clients would have
+                easier access to the art they wish for, since getting a tattoo
+                is a lifelong decision.
+              </p>
+              <p>
+                In the course I took in Iceland I made a business model for
+                inkUp along with a business pitch that was pitched to investors
+                and important people in the tech industry. I then took another
+                similar course in Madrid when I re-iterated the business model
+                and pitch, after getting artists and clients to take a number of
+                surveys in order to get more in depth knowledge on inkUp s
+                target market. I also designed the whole front end logic for the
+                application using Figma and using a mock database, implemented a
+                mock version of the application using Adalo, which is
+                accesible here.
+              </p>
+            </div>
           </div>
         </div>
       </div>

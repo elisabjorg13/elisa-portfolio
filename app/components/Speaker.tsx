@@ -9,22 +9,11 @@ import { Select } from "@react-three/postprocessing";
 const Speaker = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
   const { scene } = useGLTF("/models/Speakers.glb");
   const speakerRef = useRef<Object3D | null>(null);
-  const [hovered, setHovered] = useState(false);
   const router = useRouter();
   const handleClick = () => {
     router.push("/dj");
   };
-  // useEffect(() => {
-  //   speakerRef.current?.traverse((child) => {
-  //     child.layers.enable(10);
-  //   });
-
-  //   // ✅ Add to shared glow group
-  //   if (speakerRef.current) {
-  //     const currentGroup = getDJGlowGroup();
-  //     setDJGlowGroup([...currentGroup, speakerRef.current]);
-  //   }
-  // }, []);
+  // Removed useEffect for cursor logic
   useEffect(() => {
     if (speakerRef.current) {
       speakerRef.current.traverse((child) => {
@@ -34,15 +23,13 @@ const Speaker = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
   }, [])
 
   return (
-    <Select enabled={hovered}>
+    <Select enabled={false}>
       <primitive
         ref={speakerRef}
         object={scene}
         position={position}
         rotation={rotation}
         onClick={handleClick}
-        onPointerOver={() => !hovered && setHovered(true)}
-        onPointerOut={() => hovered && setHovered(false)}
         scale={0.45}
       />
     </Select>
