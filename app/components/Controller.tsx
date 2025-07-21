@@ -22,6 +22,8 @@ const Controller = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
     router.push("/dj");
   };
 
+
+
   // If the model hasn't loaded yet
   if (!scene) return null;
 
@@ -38,6 +40,7 @@ const Controller = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
           onPointerOver={() => setHovered(true)}
           onPointerOut={() => setHovered(false)}
         />
+  
         {hovered && (
           <Text
             position={[position[0], position[1] + 1.2, position[2]]}
@@ -47,7 +50,7 @@ const Controller = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
             anchorX="center"
             outlineColor="#fff"
             outlineWidth={0.02}
-            rotation={[0,Math.PI,0]}
+            rotation={[0, Math.PI, 0]}
           >
             Music
           </Text>

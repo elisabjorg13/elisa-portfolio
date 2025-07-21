@@ -19,7 +19,7 @@ import Stairway from "./Stairway";
 extend({ FisheyeEffect });
 
 // Simple device detection hook
-function useIsMobile() {
+export function useIsMobile() {
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 700 || /Mobi|Android/i.test(navigator.userAgent));
@@ -79,56 +79,22 @@ const Scene = () => {
   }, [active, minTimePassed]);
 
   return (
-    <div style={{ width: "100vw", height: "100vh", position: "relative" }}>
-      {showLoading && (
-        <div style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100vw",
-          height: "100vh",
-          background: "rgba(255,255,255,0.95)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          zIndex: 1000,
-        }}>
-          <div
-            style={{
-              fontSize: "2rem",
-              fontFamily: "'Times New Roman', Times, serif",
-              color: "#E94DCC",
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              letterSpacing: "0.05em",
-            }}
-          >
-            <span style={{ minWidth: "7ch", textAlign: "right" }}>Loading</span>
-            <span
-              style={{
-                marginLeft: "0.2em",
-                minWidth: "3ch",
-                display: "inline-block",
-                textAlign: "left",
-                fontFamily: "'Times New Roman', Times, serif"
-              }}
-            >
-              <span style={{ opacity: dotCount >= 1 ? 1 : 0 }}>.</span>
-              <span style={{ opacity: dotCount >= 2 ? 1 : 0 }}>.</span>
-              <span style={{ opacity: dotCount >= 3 ? 1 : 0 }}>.</span>
-            </span>
-          </div>
-        </div>
-      )}
+    <div
+      style={{
+        width: "100vw",
+        height: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#b3c7e6", // or your preferred background color
+      }}
+    >
       <Canvas
         style={{
           width: isMobile ? "100vw" : "100vw",
           height: isMobile ? "60vh" : "100vh",
           maxWidth: isMobile ? 500 : undefined,
-          margin: isMobile ? "0 auto" : undefined,
-          display: "block"
+          display: "block",
         }}
         dpr={isMobile ? 1 : 2}
       >
