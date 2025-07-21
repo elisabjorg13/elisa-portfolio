@@ -43,7 +43,7 @@ const Scene = () => {
   const [minTimePassed, setMinTimePassed] = useState(false);
 
   useEffect(() => {
-    let interval = setInterval(() => {
+    const interval = setInterval(() => {
       setDotCount((prev) => (prev % 3) + 1);
     }, 200);
 
