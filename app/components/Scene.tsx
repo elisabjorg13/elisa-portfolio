@@ -80,7 +80,6 @@ const Scene = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "#b3c7e6", // or your preferred background color
       }}
     >
       {showLoading && (
@@ -91,7 +90,7 @@ const Scene = () => {
             left: 0,
             width: "100vw",
             height: "100vh",
-            background: "#b3c7e6", // or your preferred color
+            background: 'url("/images/lowpolysku.png") center center / cover no-repeat',
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -134,7 +133,9 @@ const Scene = () => {
       >
         <ambientLight intensity={0.5} />
         <directionalLight position={[5, 5, 5]} />
-        <Environment files="/images/sky.hdr" background />
+        {isMobile
+          ? <Environment files="/images/sky.hdr" />
+          : <Environment files="/images/sky.hdr" />}
         <CameraSetup />
         <ambientLight intensity={0.5} />
         <directionalLight position={[2, 5, 2]} intensity={1} />

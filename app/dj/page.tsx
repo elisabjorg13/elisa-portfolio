@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -11,25 +11,20 @@ export default function DJPage() {
     link: string;
     stream: string;
   };
-  const [menu, setMenu] = useState<'main' | 'ELYSIUM' | 'DJ ÓK'>('main');
+  const [menu, setMenu] = useState<'ELYSIUM' | 'DJ ÓK'>('ELYSIUM');
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const mixes = [
     {
       title: "DJ örsi jersey club mix - Drif Radio",
       link: "https://www.youtube.com/watch?v=eIiaiu_8EAc&list=RDeIiaiu_8EAc&start_radio=1&t=2307s",
       stream:
-        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/SpotiDownloader.com+-+Feel+Me+-+Sassy+009.mp3",
+        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/Music/ytdl.canehill.info+-+DJ+O%CC%88RSI%CC%81+DRIF+(16+Jun+2024)+(320+KBps)-trimmed.mp3",
     },
     {
       title: "DJ ÓK mix 002 - Drif Radio",
       link: "https://www.youtube.com/watch?v=EVXhIASN9iE&list=RDEVXhIASN9iE&start_radio=1&t=485s",
       stream:
-        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/SpotiDownloader.com+-+Feel+Me+-+Sassy+009.mp3",
-    },
-    {
-      title: "DJ ÓK mix 001 - Drif Radio",
-      link: "https://www.youtube.com/watch?v=dIoA7rcR2Io&list=RDdIoA7rcR2Io&start_radio=1&t=1739s",
-      stream:
-        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/SpotiDownloader.com+-+Feel+Me+-+Sassy+009.mp3",
+        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/Music/ytdl.canehill.info+-+DJ+O%CC%81K+DRIF+(14+Apr+2024)+(320+KBps)+(1)-trimmed.wav",
     },
     {
       title: "DJ ÓK Drums pilled mix - Egregore",
@@ -41,13 +36,13 @@ export default function DJPage() {
       title: "DJ ÓK Cellar mix",
       link: "https://soundcloud.com/djok-889666396/cellarmix?si=7d7ca63bdb5447afadc08545aeee185b&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
       stream:
-        "https://www.youtube.com/watch?v=eIiaiu_8EAc&list=RDeIiaiu_8EAc&start_radio=1&t=2307s",
+        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/Music/CellarMix.mp3",
     },
     {
       title: "ELYSIUM Promising young woman - Egregore",
       link: "https://soundcloud.com/egreg-re/promising-young-woman-elysium-avril-2025?si=9354fd0dfd8a4ce0867cffbf63d747b5&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
       stream:
-        "https://www.youtube.com/watch?v=eIiaiu_8EAc&list=RDeIiaiu_8EAc&start_radio=1&t=2307s",
+        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/Music/Promising+Young+Woman+-+Elysium+(Avril+2025)+(1).mp3",
     },
     {
       title: "ELYSIUM Rich aunt mix",
@@ -82,13 +77,39 @@ export default function DJPage() {
         "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/Music/SpotiDownloader.com+-+3gs+-+ELYSIUM.mp3",
     },
   ];
-  const combinedList = menu === 'ELYSIUM' ? tracks : menu === 'DJ ÓK' ? mixes : [];
-
+  const currentList = menu === 'ELYSIUM' ? tracks : mixes;
   const [currentItem, setCurrentItem] = useState<TrackItem>(tracks[0]);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const currentIndex = combinedList.findIndex(
+  // When menu changes, select the first item
+  useEffect(() => {
+    setSelectedIndex(0);
+    setCurrentItem(menu === 'ELYSIUM' ? tracks[0] : mixes[0]);
+  }, [menu]);
+
+  // When selectedIndex changes, update currentItem
+  useEffect(() => {
+    const newItem = currentList[selectedIndex];
+    setCurrentItem(newItem);
+  
+    if (isPlaying && audioRef.current) {
+      const audio = audioRef.current;
+  
+      // Clean up previous listeners
+      const handleCanPlay = () => {
+        audio.play().catch((err) => console.warn("Play failed:", err));
+        audio.removeEventListener("canplaythrough", handleCanPlay);
+      };
+  
+      audio.pause();
+      audio.src = newItem.stream;
+      audio.load();
+      audio.addEventListener("canplaythrough", handleCanPlay);
+    }
+  }, [selectedIndex, menu]);
+
+  const currentIndex = currentList.findIndex(
     (item) => item.title === currentItem.title
   );
 
@@ -115,101 +136,91 @@ export default function DJPage() {
 
   const goToPrevious = () => {
     if (currentIndex > 0) {
-      const prevItem = combinedList[currentIndex - 1];
-      setCurrentItem(prevItem);
-      setTimeout(() => {
-        playAudio();
-        setIsPlaying(true);
-      }, 100);
+      setSelectedIndex(currentIndex - 1);
+      // Do NOT auto-play
+      setIsPlaying(false);
     }
   };
 
   const goToNext = () => {
-    if (currentIndex < combinedList.length - 1) {
-      const nextItem = combinedList[currentIndex + 1];
-      setCurrentItem(nextItem);
-      setTimeout(() => {
-        playAudio();
-        setIsPlaying(true);
-      }, 100);
+    if (currentIndex < currentList.length - 1) {
+      setSelectedIndex(currentIndex + 1);
+      // Do NOT auto-play
+      setIsPlaying(false);
     }
   };
 
   return (
     <main className="w-screen vh-100 h-screen flex items-center justify-center" style={{ cursor: 'pointer' }}>
-      <div className="bg-[#d9d9d9] w-full h-full  p-4 flex flex-col justify-between">
-        {/* Screen */}
-        <div className="relative bg-white rounded-md p-4 h-[60%] overflow-auto text-left space-y-4 flex flex-col justify-start items-start">
-          <Image
-            src="/images/MUSIC.png"
-            alt="Background Art"
-            fill
-            className="pointer-events-none object-contain opacity-30 z-0 absolute right-0 bottom-0"
-          />
-          <div className="relative z-10 w-full">
-            {menu === 'main' && (
-              <ul className="space-y-2 mt-4 w-full">
-                <li
-                  className="text-lg cursor-pointer px-4 py-2 rounded flex items-center justify-between bg-customPink text-white font-bold"
-                  onClick={() => setMenu('ELYSIUM')}
+      <div className="bg-[#ffffff] w-full h-full  p-4 flex flex-col justify-between">
+        {/* iPod Screen Split */}
+        <div className="relative bg-white border-2 border-[#d9d9d9] rounded-md p-4 h-[60%] overflow-auto flex flex-row justify-start items-start">
+          {/* Left menu */}
+          <div className="basis-1/3 flex flex-col">
+            <div
+              className={`px-4 py-2 cursor-pointer rounded-md mb-2 flex items-center justify-between ${menu === 'ELYSIUM' ? 'bg-customBlue text-white font-bold' : ''}`}
+              onClick={() => setMenu('ELYSIUM')}
+            >
+              ELYSIUM
+              {menu === 'ELYSIUM' && (
+                <svg
+                  width={14}
+                  height={14}
+                  viewBox="0 0 78 92"
+                  fill="currentColor"
+                  className="text-white ml-2"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  ELYSIUM
-                  <span className="ml-2">▶</span>
-                </li>
-                <li
-                  className="text-lg cursor-pointer px-4 py-2 rounded flex items-center justify-between bg-customBlue text-white font-bold mt-2"
-                  onClick={() => setMenu('DJ ÓK')}
+                  <path d="M78 46L-4.24146e-06 91.0333L-3.04523e-07 0.966675L78 46Z" fill="currentColor"/>
+                </svg>
+              )}
+            </div>
+            <div
+              className={`px-4 py-2 cursor-pointer rounded-md flex items-center justify-between ${menu === 'DJ ÓK' ? 'bg-customBlue text-white font-bold' : ''}`}
+              onClick={() => setMenu('DJ ÓK')}
+            >
+              DJ ÓK
+              {menu === 'DJ ÓK' && (
+                <svg
+                  width={14}
+                  height={14}
+                  viewBox="0 0 78 92"
+                  fill="currentColor"
+                  className="text-white ml-2"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  DJ ÓK
-                  <span className="ml-2">▶</span>
-                </li>
-              </ul>
-            )}
-            {menu !== 'main' && (
-              <>
-                <button
-                  className="mb-2 text-customGray text-sm underline"
-                  onClick={() => setMenu('main')}
-                >
-                  ← Back
-                </button>
-                <h1 className="text-customPink mb-2 text-xl font-bold">{menu === 'ELYSIUM' ? 'Tracks' : 'Mixes'}</h1>
-                <ul className="space-y-1">
-                  {combinedList.map((item) => (
-                    <li
-                      key={item.title}
-                      className={`text-lg cursor-pointer ${item.title === currentItem?.title ? 'text-gray-400' : 'text-customGray'}`}
-                      onClick={() => {
-                        setCurrentItem(item);
-                        setTimeout(() => {
-                          playAudio();
-                          setIsPlaying(true);
-                        }, 100);
-                      }}
-                    >
-                      {item.title}
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
+                  <path d="M78 46L-4.24146e-06 91.0333L-3.04523e-07 0.966675L78 46Z" fill="currentColor"/>
+                </svg>
+              )}
+            </div>
+          </div>
+          {/* Right list */}
+          <div className="basis-2/3 flex flex-col">
+            {currentList.map((item: TrackItem, idx: number) => (
+              <div
+                key={item.title}
+                className={`px-4 py-2 cursor-pointer rounded flex items-center ${selectedIndex === idx ? 'bg-customBlue text-white font-bold' : ''}`}
+                onClick={() => setSelectedIndex(idx)}
+              >
+                {item.title}
+              </div>
+            ))}
           </div>
         </div>
-
-        {/* Controller */}
+        {/* Controller and wheel remain unchanged below */}
         <div className="relative flex flex-col items-center justify-center">
           {/* Circular Insta/Cloud buttons above the wheel */}
 
           {/* Click Wheel */}
-          <div className="w-60 h-60 bg-white rounded-full flex flex-col items-center justify-center gap-2 text-center relative">
+          <div className="w-60 h-60 bg-[#d9d9d9] rounded-full flex flex-col items-center justify-center gap-2 text-center relative">
             {/* Insta and Cloud buttons on the wheel, flanking HOME */}
             <button
               className={`w-16 h-16 rounded-full flex items-center justify-center shadow font-bold text-xs absolute left-0 top-4 z-10
                 ${menu === 'ELYSIUM'
-                  ? 'bg-white border-2 border-customPink text-customPink hover:bg-customPink hover:text-white transition-colors cursor-pointer font-serif'
+                  ? 'bg-[#f8f8f8] border-2 border-customBlue text-customBlue hover:bg-customBlue hover:text-white transition-colors cursor-pointer font-serif'
                   : menu === 'DJ ÓK'
-                  ? 'bg-white border-2 border-customBlue text-customBlue hover:bg-customBlue hover:text-white transition-colors cursor-pointer font-serif'
-                  : 'bg-white border-2 border-gray-300 text-gray-400 hover:border-gray-400 hover:text-gray-500 transition-colors font-serif'}
+                  ? 'bg-[#f8f8f8] border-2 border-customBlue text-customBlue hover:bg-customBlue hover:text-white transition-colors cursor-pointer font-serif'
+                  : 'bg-[#f8f8f8] border-2 border-[#e0e0e0] text-gray-400 hover:border-gray-400 hover:text-gray-500 transition-colors font-serif'}
               `}
               style={{ transform: 'translate(-50%, 0)', textTransform: 'uppercase', letterSpacing: '0.1em', pointerEvents: menu === 'ELYSIUM' || menu === 'DJ ÓK' ? 'auto' : 'none', padding: '0.75rem' }}
               onClick={() => {
@@ -225,10 +236,10 @@ export default function DJPage() {
             <button
               className={`w-16 h-16 rounded-full flex items-center justify-center shadow font-bold text-xs absolute right-0 top-4 z-10
                 ${menu === 'ELYSIUM'
-                  ? 'bg-white border-2 border-customPink text-customPink hover:bg-customPink hover:text-white transition-colors cursor-pointer font-serif'
+                  ? 'bg-[#f8f8f8] border-2 border-customBlue text-customBlue hover:bg-customBlue hover:text-white transition-colors cursor-pointer font-serif'
                   : menu === 'DJ ÓK'
-                  ? 'bg-white border-2 border-customBlue text-customBlue hover:bg-customBlue hover:text-white transition-colors cursor-pointer font-serif'
-                  : 'bg-white border-2 border-gray-300 text-gray-400 hover:border-gray-400 hover:text-gray-500 transition-colors font-serif'}
+                  ? 'bg-[#f8f8f8] border-2 border-customBlue text-customBlue hover:bg-customBlue hover:text-white transition-colors cursor-pointer font-serif'
+                  : 'bg-[#f8f8f8] border-2 border-[#e0e0e0] text-gray-400 hover:border-gray-400 hover:text-gray-500 transition-colors font-serif'}
               `}
               style={{ transform: 'translate(50%, 0)', textTransform: 'uppercase', letterSpacing: '0.1em', pointerEvents: menu === 'ELYSIUM' || menu === 'DJ ÓK' ? 'auto' : 'none', padding: '0.75rem' }}
               onClick={() => {
@@ -245,50 +256,78 @@ export default function DJPage() {
             <button
               className="absolute left-2 text-xl"
               onClick={goToPrevious}
-              disabled={menu === 'main'}
-              style={menu === 'main' ? { opacity: 0.5, pointerEvents: 'none' } : {}}
+              disabled={currentIndex === 0}
+              style={currentIndex === 0 ? { opacity: 0.5, pointerEvents: 'none' } : {}}
             >
-              <Image
-                src="/images/backButtonGray.png"
-                alt="Play"
+              <svg
                 width={28}
-                height={28}
-              />
+                height={18}
+                viewBox="0 0 104 68"
+                fill="currentColor"
+                className="text-white"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M-1.4552e-06 34L49.9365 5.16913L49.9365 62.8308L-1.4552e-06 34Z" fill="currentColor"/>
+                <path d="M37.1328 34L87.0693 5.16913L87.0693 62.8308L37.1328 34Z" fill="currentColor"/>
+              </svg>
             </button>
             <button
               className="absolute right-2 text-xl"
               onClick={goToNext}
-              disabled={menu === 'main'}
-              style={menu === 'main' ? { opacity: 0.5, pointerEvents: 'none' } : {}}
+              disabled={currentIndex === currentList.length - 1}
+              style={currentIndex === currentList.length - 1 ? { opacity: 0.5, pointerEvents: 'none' } : {}}
             >
-              <Image
-                src="/images/skipButtonGray.png"
-                alt="Play"
+              <svg
                 width={28}
-                height={28}
-              />
+                height={18}
+                viewBox="0 0 104 68"
+                fill="currentColor"
+                className="text-white"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M103.715 34L53.7783 62.8308L53.7783 5.16913L103.715 34Z" fill="currentColor"/>
+                <path d="M66.582 34L16.6455 62.8308L16.6455 5.16913L66.582 34Z" fill="currentColor"/>
+              </svg>
             </button>
             <button
               className="absolute ml-2 bottom-2"
               onClick={togglePlayback}
-              disabled={menu === 'main'}
-              style={menu === 'main' ? { opacity: 0.5, pointerEvents: 'none' } : {}}
+              disabled={currentList.length === 0}
+              style={currentList.length === 0 ? { opacity: 0.5, pointerEvents: 'none' } : {}}
             >
-              <Image
-                src={`/images/${isPlaying ? "pauseButtonGray.png" : "playButtonGray.png"}`}
-                alt="Play"
-                width={24}
-                height={24}
-              />
+              {isPlaying ? (
+                <svg
+                  width={18}
+                  height={28}
+                  viewBox="0 0 61 92"
+                  fill="currentColor"
+                  className="text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect width="14" height="92" fill="currentColor"/>
+                  <rect x="47" width="14" height="92" fill="currentColor"/>
+                </svg>
+              ) : (
+                <svg
+                  width={24}
+                  height={28}
+                  viewBox="0 0 78 92"
+                  fill="currentColor"
+                  style={{ color: "#fff" }}
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M78 46L-4.24146e-06 91.0333L-3.04523e-07 0.966675L78 46Z" fill="currentColor"/>
+                </svg>
+              )}
             </button>
             {/* HOME always enabled */}
             <button
-              className="text-lg absolute top-2 left-1/2 -translate-x-1/2"
+              className="text-lg  absolute top-2 left-1/2 -translate-x-1/2"
               onClick={handleClickHome}
             >
-              <p className="text-gray-500">HOME</p>
+              <p className="text-white">HOME</p>
             </button>
-            <div className="w-20 h-20 bg-[#d9d9d9] rounded-full shadow-inner" />
+            <div className="w-20 h-20 bg-[#f8f8f8] rounded-full shadow-inner" />
           </div>
         </div>
       </div>

@@ -14,7 +14,7 @@ export default function blenderMuseumPage() {
         <ambientLight intensity={1} />
         <directionalLight position={[2, 2, 2]} intensity={1} />
         <DjokLogo position={[0, 1, 0]} scale={1.5} />
-        <MeLillyPad position={[0, -2, 0]} scale={0.15}  />
+        <MeLillyPad position={[0, -2, 0]} rotation={[0, Math.PI, 0]} scale={0.15}  />
       </Canvas>
 
       {/* Optional overlay text */}

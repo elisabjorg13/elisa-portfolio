@@ -1,85 +1,106 @@
 "use client";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 700 || /Mobi|Android/i.test(navigator.userAgent));
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+  return isMobile;
+}
 
 export default function projectsPage() {
+  const isMobile = useIsMobile();
   return (
-    <main className="min-h-screen w-full mx-auto flex flex-col items-start justify-start mt-4 gap-20 cursor-pointer">
-      <div className="ml-20 mr-10 mb-10 flex flex-col gap-10">
-        <h1 className="">Projects - Content</h1>
+    <main
+      className={`min-h-screen w-full mx-auto flex flex-col items-start justify-start mt-4 gap-20 cursor-pointer ${isMobile ? 'text-sm' : 'text-base'}`}
+    >
+      <div
+        className={`mb-10 flex flex-col gap-10 ${isMobile ? 'ml-4 mr-2' : 'ml-20 mr-10'}`}
+        style={isMobile ? {} : {}} // No inline margin for mobile
+      >
+        <h1 className={isMobile ? "text-xl" : "text-3xl"}>Projects - Content</h1>
         <div>
           <h2>Work From Home studios</h2>
-          <p className="mr-24">
+          <p className={`${isMobile ? 'mr-1' : 'mr-24'}`}>
             Work From Home Studios I cofounded with Katrín Hersisdóttir. It is a
             web design studio where I implement websites for various brands and
             artists.
           </p>
-          <div className="flex flex-col ml-8 mt-4 gap-4">
+          <div className={`flex flex-col mt-4 gap-4 `}>
             <a
               href="https://www.suskin.is"
               target="_blank"
               rel="noopener noreferrer"
-              className=" text-customPurple text-xl hover:underline"
+              className={`text-customPurple hover:underline ${isMobile ? 'text-base' : 'text-xl'}`}
             >
               Suskin.is
             </a>
-            <div className="flex flex-col gap-4 items-center">
+            <div className={`flex flex-col gap-4 ${isMobile ? '' : 'items-center'}`}>
               <Image
                 src="/images/suskinLanding.png" // Must be in the public/ folder
                 alt="Magic Wand"
-                width={900}
-                height={700}
-                className="w-ful h-auto"
+                width={isMobile ? 300 : 900}
+                height={isMobile ? 200 : 700}
+                className={isMobile ? "h-auto ml-6" : "h-auto"}
               />
               <Image
                 src="/images/suskinShopping.png" // Must be in the public/ folder
                 alt="Magic Wand"
-                width={900}
-                height={700}
-                className="w-ful h-auto"
+                width={isMobile ? 300 : 900}
+                height={isMobile ? 200 : 700}
+                className={isMobile ? "h-auto ml-6" : "h-auto"}
               />
             </div>
           </div>
-          <div className="flex flex-col ml-8 mt-4 gap-4">
+          <div className="flex flex-col mt-4 gap-4">
             <a
               href="https://www.katrinhers.is"
               target="_blank"
               rel="noopener noreferrer"
-              className=" text-customPurple text-xl hover:underline"
+              className={`text-customPurple hover:underline ${isMobile ? 'text-base' : 'text-xl'}`}
             >
               Katrinhers.is
             </a>
-            <div className="flex flex-col gap-4 items-center">
+            <div className={`flex flex-col gap-4 ${isMobile ? '' : 'items-center'}`}>
               <video
                 src="/images/whitebgmockupcompressed.mp4" // Must be in the public/ folder
-                width={900}
-                height={700}
+                width={isMobile ? 350 : 900}
+                height={isMobile ? 250 : 700}
+                className={isMobile ? "h-auto ml-1" : "h-auto"}
                 autoPlay
                 muted
                 loop
+                playsInline
+                controls={false}
               />
             </div>
           </div>
         </div>
         <div>
-          <h2>Indó Currency Converter</h2>
+          <h2 className={isMobile ? "text-sm" : ""}>Indó Currency Converter</h2>
           <div className="flex flex-col gap-4 items-center">
             <div className="flex flex-row gap-4 items-center">
               <Image
                 src="/images/indoConverter1.png" // Must be in the public/ folder
                 alt="Magic Wand"
-                width={200}
-                height={400}
+                width={isMobile?100:200}
+                height={isMobile?200:400}
                 className="h-auto"
               />
               <Image
                 src="/images/indoConverter2.png" // Must be in the public/ folder
                 alt="Magic Wand"
-                width={200}
-                height={400}
+                width={isMobile?100:200}
+                height={isMobile?200:400}
                 className=" h-auto"
               />
             </div>
-            <div className="text-justify ml-8 mr-24">
+            <div className={`text-justify ${isMobile ? 'mr-8' : 'ml-8 mr-24'}`}>
               <p>
                 During my time working for indo I gained experience in
                 programming with Flutter, which was used to develop the front
@@ -108,12 +129,12 @@ export default function projectsPage() {
               <Image
                 src="/images/pikkolo .png" // Must be in the public/ folder
                 alt="Magic Wand"
-                width={300}
-                height={400}
+                width={isMobile?200:300}
+                height={isMobile?100:400}
                 className=" h-auto"
               />
             </div>
-            <div className="text-justify flex flex-col gap-8 mr-24">
+            <div className={`text-justify flex flex-col gap-8 ${isMobile ? 'mr-8' : 'ml-8 mr-24'}`}>
               <div className="flex flex-col gap-2">
                 <p>Motivation</p>
                 <p>
@@ -162,19 +183,19 @@ export default function projectsPage() {
               <Image
                 src="/images/inkUp1.png" // Must be in the public/ folder
                 alt="Magic Wand"
-                width={200}
-                height={400}
+                width={isMobile?100:200}
+                height={isMobile?200:400}
                 className="h-auto"
               />
               <Image
                 src="/images/inkup2.png" // Must be in the public/ folder
                 alt="Magic Wand"
-                width={200}
-                height={400}
+                width={isMobile?100:200}
+                height={isMobile?200:400}
                 className=" h-auto"
               />
             </div>
-            <div className=" text-justify flex flex-col gap-8 ml-8 mr-24">
+            <div className={`text-justify flex flex-col gap-8 ${isMobile ? 'ml-8 mr-8' : 'ml-8 mr-24'}`}>
               <p className="">
                 inkUp is a startup idea that was born when I took an
                 entrepreneurially focused course in the University of Iceland.

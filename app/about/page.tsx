@@ -2,11 +2,24 @@
 
 import { Canvas } from "@react-three/fiber";
 import Butterfly from "../components/Butterfly"; // Adjust the import path as needed
+import { useEffect, useState } from "react";
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 700 || /Mobi|Android/i.test(navigator.userAgent));
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+  return isMobile;
+}
 
 export default function aboutPage() {
+  const isMobile = useIsMobile();
   return (
     <main className="min-h-screen w-full flex flex-col items-start justify-start cursor-pointer">
-      <div className="max-w-[1200px] px-20 py-20 flex flex-col gap-[4rem] w-3/4">
+      <div className={`max-w-[1200px] flex flex-col gap-[4rem]  ${isMobile ? 'px-4 py-4' : 'px-20 py-20 w-3/4'}`}>
         <div>
           <h1>About me</h1>
           <p>
@@ -53,10 +66,10 @@ export default function aboutPage() {
       <div
         style={{
           position: "absolute",
-          top: "2rem",
-          right: "2rem",
-          width: "400px",
-          height: "400px",
+          top: isMobile ? "11rem" : "2rem",
+          right: isMobile ? "0.5rem" : "2rem",
+          width: isMobile ? "180px" : "400px",
+          height: isMobile ? "180px" : "400px",
           pointerEvents: "none",
           zIndex: 20,
         }}
@@ -67,7 +80,7 @@ export default function aboutPage() {
           <Butterfly
             position={[1, 1.5, 0]}
             rotation={[-Math.PI / 2, 0, 0]}
-            scale={1}
+            scale={isMobile ? 1 : 1}
           />
         </Canvas>
       </div>
