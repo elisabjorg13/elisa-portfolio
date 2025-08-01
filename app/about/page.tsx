@@ -15,7 +15,7 @@ function useIsMobile() {
   return isMobile;
 }
 
-export default function aboutPage() {
+export default function AboutPage() {
   const isMobile = useIsMobile();
   return (
     <main className="min-h-screen w-full flex flex-col items-start justify-start cursor-pointer">

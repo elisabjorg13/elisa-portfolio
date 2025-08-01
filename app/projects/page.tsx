@@ -13,7 +13,7 @@ function useIsMobile() {
   return isMobile;
 }
 
-export default function projectsPage() {
+export default function ProjectsPage() {
   const isMobile = useIsMobile();
   return (
     <main
