@@ -1,9 +1,7 @@
 "use client";
 import { Canvas, useThree } from "@react-three/fiber";
-import { FisheyeEffect } from "./FisheyeEffect";
 import { Environment, OrbitControls } from "@react-three/drei";
 import { useEffect, useState } from "react";
-import { extend } from "@react-three/fiber";
 import { useProgress } from "@react-three/drei";
 
 import Model from "./Model";
@@ -12,11 +10,12 @@ import Speaker2 from "./Speaker2";
 import Computer1 from "./Computer1";
 import Controller from "./Controller";
 import BlenderMuseum from "./BlenderMuseum";
-import Butterfly from "./Butterfly";
+
 
 import Paper from "./Paper";
 import Stairway from "./Stairway";
-extend({ FisheyeEffect });
+import Arrow from "./Arrow";
+
 
 // Simple device detection hook
 export function useIsMobile() {
@@ -34,7 +33,7 @@ const CameraSetup = () => {
   const { camera } = useThree();
 
   useEffect(() => {
-    const radius = 10; // distance from center
+    const radius = 14; // distance from center
     const angle = Math.PI + 0.5; // ~22.5 degrees counterclockwise
 
     // Calculate new X/Z position (Y is unchanged here)
@@ -57,7 +56,7 @@ const Scene = () => {
   useEffect(() => {
     // Always show at least 600ms of animation
     setMinTimePassed(false);
-    const minTimeout = setTimeout(() => setMinTimePassed(true), 600);
+    const minTimeout = setTimeout(() => setMinTimePassed(true), 300);
 
     return () => {
       clearTimeout(minTimeout);
@@ -90,25 +89,30 @@ const Scene = () => {
             left: 0,
             width: "100vw",
             height: "100vh",
-            background: 'url("/images/lowpolysku.png") center center / cover no-repeat',
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             zIndex: 1000,
           }}
         >
+          <div>
+          <img
+            src="/images/loadingscreen.gif"
+            alt="Loading..."
+            style={{ width: "200px", height: "200px" }} // adjust size as needed
+          />
           <div
             style={{
-              fontSize: "2rem",
+              fontSize: "1rem",
               fontFamily: "'Times New Roman', Times, serif",
-              color: "#E94DCC",
+              color: "#000000",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               letterSpacing: "0.05em",
             }}
           >
-            <span style={{ minWidth: "7ch", textAlign: "right" }}>Loading</span>
+            <span style={{ minWidth: "7ch", textAlign: "right" }}>Entering</span>
             <span
               className="dot-anim"
               style={{
@@ -120,6 +124,8 @@ const Scene = () => {
               }}
             ></span>
           </div>
+         
+          </div>
         </div>
       )}
       <Canvas
@@ -129,16 +135,14 @@ const Scene = () => {
           maxWidth: isMobile ? 500 : undefined,
           display: "block",
         }}
-        dpr={isMobile ? 2 : 2}
+        dpr={isMobile ? [1, 2] : [1, 2]}
       >
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[5, 5, 5]} />
         {isMobile
           ? <Environment files="/images/sky.hdr" />
           : <Environment files="/images/sky.hdr" />}
         <CameraSetup />
         <ambientLight intensity={0.5} />
-        <directionalLight position={[2, 5, 2]} intensity={1} />
+        <directionalLight position={[-2, 5, -2]} intensity={1} />
         <BlenderMuseum position={[10, -1.5, 2]} rotation={[0, 1, 0]} />
 
         <Model />
@@ -146,11 +150,7 @@ const Scene = () => {
         <Speaker2 position={[4, -1.5, -6.5]} rotation={[0, Math.PI - 0.5, 0]} />
 
         <Computer1 position={[-5, -2.3, 6]} rotation={[0, Math.PI + 2.6, 0]} />
-        <Butterfly
-          position={[2, 3, 0]}
-          rotation={[Math.PI * 4, Math.PI - 5, 0]}
-          scale={0.8}
-        />
+        <Arrow position={[5, 5, 0]} rotation={[0, Math.PI / 2 - 2.5, 0]} />
         <Controller position={[1.5, -2, -5]} rotation={[0, Math.PI - 1.4, 0]} />
         <Paper position={[-5, -2.5, -3]} rotation={[0, 0.7, 0]}></Paper>
         <Stairway position={[0, -2.83, 1.5]} rotation={[0, -1.1, 0]}></Stairway>

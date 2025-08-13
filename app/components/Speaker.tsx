@@ -4,8 +4,6 @@ import { useGLTF } from "@react-three/drei";
 import { Object3D } from "three";
 
 
-import { Select } from "@react-three/postprocessing";
-
 const Speaker = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
   const { scene } = useGLTF("/models/Speakers.glb");
   const speakerRef = useRef<Object3D | null>(null);
@@ -15,7 +13,7 @@ const Speaker = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
 
 
   return (
-    <Select enabled={false}>
+
       <primitive
         ref={speakerRef}
         object={scene}
@@ -24,8 +22,10 @@ const Speaker = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
 
         scale={0.45}
       />
-    </Select>
+
   );
 };
+
+useGLTF.preload("/models/Speakers.glb");
 
 export default Speaker;

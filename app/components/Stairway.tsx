@@ -21,4 +21,6 @@ const Stairway = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
   );
 };
 
+useGLTF.preload("/models/glass.glb");
+
 export default Stairway;

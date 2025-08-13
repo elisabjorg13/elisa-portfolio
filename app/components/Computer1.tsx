@@ -45,4 +45,6 @@ const Computer1 = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
   );
 };
 
+useGLTF.preload("/models/computerwall.glb");
+
 export default Computer1;

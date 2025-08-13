@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import { useGLTF } from "@react-three/drei";
 import { Object3D, Mesh } from "three";
 import { Select } from "@react-three/postprocessing";
+import { useRouter } from "next/navigation";
 import { Text } from "@react-three/drei";
 
 const Paper = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
@@ -11,25 +12,16 @@ const Paper = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
   const [hovered, setHovered] = useState(false);
 
   const sceneClone = useMemo(() => scene.clone(), [scene]);
+  const router = useRouter();
 
-  // Enable outline layer
-  useEffect(() => {
-    paperRef.current?.traverse((child) => {
-      if (child instanceof Mesh) child.layers.enable(0);
-    });
-  }, []);
 
-  // Removed useEffect for cursor logic
 
   const handleClick = () => {
-    window.open(
-      "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/resumeMR.pdf",
-      "_blank"
-    );
+    router.push("/cv");
   };
 
   return (
-    <Select enabled={hovered}>
+
       <>
         <primitive
           ref={paperRef}
@@ -56,9 +48,11 @@ const Paper = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
           </Text>
         )}
       </>
-    </Select>
+
   );
 };
 
+
 useGLTF.preload("/models/paper.glb");
+
 export default Paper;

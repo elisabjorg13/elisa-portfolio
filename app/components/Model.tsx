@@ -79,4 +79,6 @@ const Model = () => {
   );
 };
 
+useGLTF.preload("/models/me.glb");
+
 export default Model;

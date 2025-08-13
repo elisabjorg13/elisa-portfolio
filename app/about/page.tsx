@@ -1,7 +1,4 @@
 "use client";
-
-import { Canvas } from "@react-three/fiber";
-import Butterfly from "../components/Butterfly"; // Adjust the import path as needed
 import { useEffect, useState } from "react";
 
 function useIsMobile() {
@@ -62,28 +59,7 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* Butterfly Canvas */}
-      <div
-        style={{
-          position: "absolute",
-          top: isMobile ? "11rem" : "2rem",
-          right: isMobile ? "0.5rem" : "2rem",
-          width: isMobile ? "180px" : "400px",
-          height: isMobile ? "180px" : "400px",
-          pointerEvents: "none",
-          zIndex: 20,
-        }}
-      >
-        <Canvas camera={{ position: [0, 0, 5] }}>
-          <ambientLight intensity={0.5} />
-          <directionalLight position={[2, 2, 2]} />
-          <Butterfly
-            position={[1, 1.5, 0]}
-            rotation={[-Math.PI / 2, 0, 0]}
-            scale={isMobile ? 1 : 1}
-          />
-        </Canvas>
-      </div>
+
     </main>
   );
 }

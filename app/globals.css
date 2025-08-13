@@ -16,7 +16,6 @@ body {
 
   /* 🪄 Add custom cursor */
   /* cursor: pointer !important; */
-
 }
 h1 {
   color: #6A00FF;
@@ -27,7 +26,7 @@ h2 {
   color: #6A00FF;
 }
 p{
-  color:#7C7C7C
+  color:#4d4d4d
 }
 
 .dot-anim::after {
@@ -40,4 +39,19 @@ p{
   33%  { content: '.'; }
   66%  { content: '..'; }
   100% { content: '...'; }
+}
+
+
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 10mm;
+  }
+  /* Print only the CV area; hide everything else (badges, toolbars, etc.) */
+  body * { visibility: hidden !important; }
+  #cv-root, #cv-root * { visibility: visible !important; }
+  #cv-root { position: absolute; left: 0; top: 0; width: 100%; }
+
+  /* Optional: remove link URL annotations some browsers append */
+  a[href]::after { content: '' !important; }
 }
