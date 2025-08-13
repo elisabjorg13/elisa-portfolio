@@ -1,8 +1,8 @@
 "use client";
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useRef, useState, useMemo } from "react";
 import { useGLTF } from "@react-three/drei";
-import { Object3D, Mesh } from "three";
-import { Select } from "@react-three/postprocessing";
+import { Object3D} from "three";
+
 import { useRouter } from "next/navigation";
 import { Text } from "@react-three/drei";
 

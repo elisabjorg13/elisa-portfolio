@@ -21,12 +21,10 @@ const Model = () => {
     scene.traverse((child) => {
       if ("isBone" in child && child.name === "Bone") {
         headBoneRef.current = child as Bone;
-        console.log("🎯 Found the bone:", child.name);
       }
 
       if (child.name === "Cube") {
         bodyRef.current = child;
-        console.log("🧍 Body mesh found:", child.name);
       }
     });
   }, [scene]);
