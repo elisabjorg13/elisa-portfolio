@@ -5,18 +5,53 @@ import { useGLTF } from "@react-three/drei";
 import { Object3D, Bone } from "three";
 import { useRouter } from "next/navigation";
 import { Text } from "@react-three/drei";
+import { Html } from "@react-three/drei";
 
-const Model = () => {
+interface LabelInfo {
+  id: number;
+  label: string;
+  position: [number, number, number];
+}
+
+interface ModelProps {
+  onLabelChange?: (labelInfo: LabelInfo) => void;
+}
+
+const Model = ({ onLabelChange }: ModelProps) => {
   const { scene } = useGLTF("/models/me.glb");
   const headBoneRef = useRef<Bone | null>(null);
   const bodyRef = useRef<Object3D | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
   const [hovered, setHovered] = useState(false);
 
+  // Mobile detection
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 700 || /Mobi|Android/i.test(navigator.userAgent));
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Notify parent component about label info
+  useEffect(() => {
+    if (onLabelChange) {
+      onLabelChange({
+        id: 4,
+        label: "About",
+        position: [-1.1, -1.5 + 3.5, -1]
+      });
+    }
+  }, [onLabelChange]);
+
   const handleClick = () => {
-    router.push("/about"); // or wherever you want to send the user
+    router.push("/about");
   };
+
   useEffect(() => {
     scene.traverse((child) => {
       if ("isBone" in child && child.name === "Bone") {
@@ -59,7 +94,33 @@ const Model = () => {
         onPointerOver={() => setHovered(true)}
         onPointerOut={() => setHovered(false)}
       />
-      {hovered && (
+      
+      {/* Show numbered circle on mobile */}
+      {isMobile && (
+        <Html position={[-1.1, -2 + 3.5, -1]}>
+          <div
+            style={{
+              width: "16px",
+              height: "16px",
+              backgroundColor: "#3B82F6",
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "white",
+              fontSize: "10px",
+              fontWeight: "bold",
+              border: "2px solid white",
+              transform: "translate(-50%, -50%)",
+            }}
+          >
+            4
+          </div>
+        </Html>
+      )}
+
+      {/* Show styled text on hover for desktop */}
+      {!isMobile && hovered && (
         <Text
           position={[-1.1, -1.5 + 3.5, -1]}
           fontSize={0.4}
