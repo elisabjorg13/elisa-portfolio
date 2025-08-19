@@ -59,9 +59,6 @@ const Controller = ({ position = [0, 0, 0], rotation = [0, 0, 0], onLabelChange 
   // If the model hasn't loaded yet
   if (!scene) return null;
 
-  // Show numbered circle permanently on mobile, or on hover for desktop
-  const shouldShowLabel = isMobile || hovered;
-
   return (
     <Select enabled={hovered}>
       <>
