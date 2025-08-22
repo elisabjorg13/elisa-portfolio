@@ -139,8 +139,8 @@ export default function DJPage() {
   const goToNext = () => {
     if (currentIndex < currentList.length - 1) {
       setSelectedIndex(currentIndex + 1);
-      // Do NOT auto-play
-      setIsPlaying(false);
+      // Auto-play the next song
+      setIsPlaying(true);
     }
   };
 
@@ -152,7 +152,7 @@ export default function DJPage() {
           {/* Left menu */}
           <div className="basis-1/3 flex flex-col">
             <div
-              className={`px-4 py-2 cursor-pointer rounded-md mb-2 flex items-center justify-between ${menu === 'ELYSIUM' ? 'bg-customBlue text-white font-bold' : ''}`}
+              className={`px-4 py-2 cursor-pointer rounded-md mb-2 flex items-center justify-between text-sm md:text-base ${menu === 'ELYSIUM' ? 'bg-customBlue text-white font-bold' : ''}`}
               onClick={() => setMenu('ELYSIUM')}
             >
               ELYSIUM
@@ -170,7 +170,7 @@ export default function DJPage() {
               )}
             </div>
             <div
-              className={`px-4 py-2 cursor-pointer rounded-md flex items-center justify-between ${menu === 'DJ ÓK' ? 'bg-customBlue text-white font-bold' : ''}`}
+              className={`px-4 py-2 cursor-pointer rounded-md flex items-center justify-between text-sm md:text-base ${menu === 'DJ ÓK' ? 'bg-customBlue text-white font-bold' : ''}`}
               onClick={() => setMenu('DJ ÓK')}
             >
               DJ ÓK
@@ -193,7 +193,7 @@ export default function DJPage() {
             {currentList.map((item: TrackItem, idx: number) => (
               <div
                 key={item.title}
-                className={`px-4 py-2 cursor-pointer rounded flex items-center ${selectedIndex === idx ? 'bg-customBlue text-white font-bold' : ''}`}
+                className={`px-4 py-2 cursor-pointer rounded flex items-center text-xs md:text-sm ${selectedIndex === idx ? 'bg-customBlue text-white font-bold' : ''}`}
                 onClick={() => setSelectedIndex(idx)}
               >
                 {item.title}
@@ -225,7 +225,7 @@ export default function DJPage() {
                 }
               }}
             >
-              Insta
+              <span className="text-xs md:text-sm">Insta</span>
             </button>
             <button
               className={`w-16 h-16 rounded-full flex items-center justify-center shadow font-bold text-xs absolute right-0 top-4 z-10
@@ -244,7 +244,7 @@ export default function DJPage() {
                 }
               }}
             >
-              Cloud
+              <span className="text-xs md:text-sm">Cloud</span>
             </button>
             {/* Disable prev, next, play/pause, back when on main menu */}
             <button
@@ -319,7 +319,7 @@ export default function DJPage() {
               className="text-lg  absolute top-2 left-1/2 -translate-x-1/2"
               onClick={handleClickHome}
             >
-              <p className="text-white">HOME</p>
+              <p className="text-white text-xs md:text-sm">HOME</p>
             </button>
             <div className="w-20 h-20 bg-[#f8f8f8] rounded-full shadow-inner" />
           </div>

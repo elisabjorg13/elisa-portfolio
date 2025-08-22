@@ -14,7 +14,6 @@ import BlenderMuseum from "./BlenderMuseum";
 
 import Paper from "./Paper";
 import Stairway from "./Stairway";
-import Arrow from "./Arrow";
 
 
 // Simple device detection hook
@@ -52,10 +51,12 @@ const Scene = () => {
   const [showLoading, setShowLoading] = useState(true);
   const [minTimePassed, setMinTimePassed] = useState(false);
   const [labels, setLabels] = useState<Array<{id: number, label: string}>>([]);
+  // const [modelsLoaded, setModelsLoaded] = useState(0);
+  // const totalModels = 8; // Total number of 3D models
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    // Always show at least 600ms of animation
+    // Always show at least 300ms of animation
     setMinTimePassed(false);
     const minTimeout = setTimeout(() => setMinTimePassed(true), 300);
 
@@ -71,6 +72,11 @@ const Scene = () => {
       setShowLoading(true);
     }
   }, [active, minTimePassed]);
+
+  // Track when models are loaded (you can call this from individual model components)
+  // const handleModelLoad = () => {
+  //   setModelsLoaded(prev => prev + 1);
+  // };
 
   const handleLabelChange = (labelInfo: {id: number, label: string, position: [number, number, number]}) => {
     setLabels(prev => {
@@ -103,38 +109,72 @@ const Scene = () => {
             alignItems: "center",
             justifyContent: "center",
             zIndex: 1000,
+            backgroundColor: "#ffffff",
           }}
         >
-          <div>
-          <img
-            src="/images/loadingscreen.gif"
-            alt="Loading..."
-            style={{ width: "200px", height: "200px" }} // adjust size as needed
-          />
-          <div
-            style={{
-              fontSize: "1rem",
-              fontFamily: "'Times New Roman', Times, serif",
-              color: "#000000",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              letterSpacing: "0.05em",
-            }}
-          >
-            <span style={{ minWidth: "7ch", textAlign: "right" }}>Entering</span>
-            <span
-              className="dot-anim"
+          <div style={{ textAlign: "center" }}>
+            <img
+              src="/images/loadingscreen.gif"
+              alt="Loading..."
+              style={{ width: "200px", height: "200px" }}
+            />
+            <div
               style={{
-                marginLeft: "0.2em",
-                minWidth: "3ch",
-                display: "inline-block",
-                textAlign: "left",
-                fontFamily: "'Times New Roman', Times, serif"
+                fontSize: "1rem",
+                fontFamily: "'Times New Roman', Times, serif",
+                color: "#000000",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                letterSpacing: "0.05em",
+                marginTop: "20px",
               }}
-            ></span>
-          </div>
-         
+            >
+              <span style={{ minWidth: "7ch", textAlign: "right" }}>Loading</span>
+              <span
+                className="dot-anim"
+                style={{
+                  marginLeft: "0.2em",
+                  minWidth: "3ch",
+                  display: "inline-block",
+                  textAlign: "left",
+                  fontFamily: "'Times New Roman', Times, serif"
+                }}
+              ></span>
+            </div>
+            {active && (
+              <div
+                style={{
+                  marginTop: "20px",
+                  fontSize: "0.9rem",
+                  color: "#666",
+                  fontFamily: "'Times New Roman', Times, serif",
+                }}
+              >
+                Loading 3D models... {typeof active === "number" ? Math.round(active * 100) : 0}%
+                <div
+                  style={{
+                    width: "200px",
+                    height: "4px",
+                    backgroundColor: "#e0e0e0",
+                    borderRadius: "2px",
+                    marginTop: "10px",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: typeof active === "number" ? `${active * 100}%` : "0%",
+                      height: "100%",
+                      backgroundColor: "#3B82F6",
+                      borderRadius: "2px",
+                      transition: "width 0.3s ease",
+                    }}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -160,7 +200,7 @@ const Scene = () => {
         <Speaker2 position={[4, -1.5, -6.5]} rotation={[0, Math.PI - 0.5, 0]} />
 
         <Computer1 position={[-5, -2.3, 6]} rotation={[0, Math.PI + 2.6, 0]} onLabelChange={handleLabelChange} />
-        <Arrow position={[5, 5, 0]} rotation={[0, Math.PI / 2 - 2.5, 0]} />
+        {/* <Arrow position={[5, 5, 0]} rotation={[0, Math.PI / 2 - 2.5, 0]} /> */}
         <Controller position={[1.5, -2, -5]} rotation={[0, Math.PI - 1.4, 0]} onLabelChange={handleLabelChange} />
         <Paper position={[-5, -2.5, -3]} rotation={[0, 0.7, 0]} onLabelChange={handleLabelChange}></Paper>
         <Stairway position={[0, -2.83, 1.5]} rotation={[0, -1.1, 0]}></Stairway>

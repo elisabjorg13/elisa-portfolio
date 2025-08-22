@@ -17,21 +17,28 @@ export default function ProjectsPage() {
   const isMobile = useIsMobile();
   return (
     <main
-      className={`min-h-screen w-full mx-auto flex flex-col items-start justify-start mt-4 gap-20 cursor-pointer ${isMobile ? 'text-sm' : 'text-base'}`}
+      className={`h-screen w-full mx-auto flex flex-col items-start justify-start mt-2 md:mt-4 gap-4 md:gap-20 cursor-pointer ${isMobile ? 'text-sm' : 'text-base'}`}
+      style={{
+        scrollbarWidth: 'none', /* Firefox */
+        msOverflowStyle: 'none', /* Internet Explorer 10+ */
+      }}
     >
       <div
-        className={`mb-10 flex flex-col gap-10 ${isMobile ? 'ml-4 mr-2' : 'ml-20 mr-10'}`}
-        style={isMobile ? {} : {}} // No inline margin for mobile
+        className={`flex flex-col gap-4 md:gap-10 ${isMobile ? 'px-4' : 'ml-20 mr-10'}`}
+        style={{
+          scrollbarWidth: 'none', /* Firefox */
+          msOverflowStyle: 'none', /* Internet Explorer 10+ */
+        }}
       >
         <h1 className={isMobile ? "text-xl" : "text-3xl"}>Projects - Content</h1>
         <div>
           <h2>Work From Home studios</h2>
-          <p className={`${isMobile ? 'mr-1' : 'mr-24'}`}>
+          <p className={`${isMobile ? 'text-center' : 'mr-24'}`}>
             Work From Home Studios I cofounded with Katrín Hersisdóttir. It is a
             web design studio where I implement websites for various brands and
             artists.
           </p>
-          <div className={`flex flex-col mt-4 gap-4 `}>
+          <div className={`flex flex-col mt-4 gap-4 ${isMobile ? 'items-center' : ''}`}>
             <a
               href="https://www.suskin.is"
               target="_blank"
@@ -40,24 +47,24 @@ export default function ProjectsPage() {
             >
               Suskin.is
             </a>
-            <div className={`flex flex-col gap-4 ${isMobile ? '' : 'items-center'}`}>
+            <div className={`flex flex-col gap-4 ${isMobile ? 'items-center w-full' : 'items-center'}`}>
               <Image
-                src="/images/suskinLanding.png" // Must be in the public/ folder
-                alt="Magic Wand"
+                src="/images/suskinLanding.png"
+                alt="Suskin Landing Page"
                 width={isMobile ? 300 : 900}
                 height={isMobile ? 200 : 700}
-                className={isMobile ? "h-auto ml-6" : "h-auto"}
+                className="h-auto"
               />
               <Image
-                src="/images/suskinShopping.png" // Must be in the public/ folder
-                alt="Magic Wand"
+                src="/images/suskinShopping.png"
+                alt="Suskin Shopping Page"
                 width={isMobile ? 300 : 900}
                 height={isMobile ? 200 : 700}
-                className={isMobile ? "h-auto ml-6" : "h-auto"}
+                className="h-auto"
               />
             </div>
           </div>
-          <div className="flex flex-col mt-4 gap-4">
+          <div className={`flex flex-col mt-4 gap-4 ${isMobile ? 'items-center' : ''}`}>
             <a
               href="https://www.katrinhers.is"
               target="_blank"
@@ -66,12 +73,12 @@ export default function ProjectsPage() {
             >
               Katrinhers.is
             </a>
-            <div className={`flex flex-col gap-4 ${isMobile ? '' : 'items-center'}`}>
+            <div className={`flex flex-col gap-4 ${isMobile ? 'items-center w-full' : 'items-center'}`}>
               <video
-                src="/images/whitebgmockupcompressed.mp4" // Must be in the public/ folder
+                src="/images/whitebgmockupcompressed.mp4"
                 width={isMobile ? 350 : 900}
                 height={isMobile ? 250 : 700}
-                className={isMobile ? "h-auto ml-1" : "h-auto"}
+                className="h-auto"
                 autoPlay
                 muted
                 loop
