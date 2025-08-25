@@ -6,10 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "analyze": "ANALYZE=true next build",
-    "optimize-models": "node scripts/optimize-models.js",
-    "compress-images": "node scripts/compress-images.js"
+    "lint": "next lint"
   },
   "dependencies": {
     "@prismicio/client": "^7.16.1",
@@ -35,12 +32,6 @@
     "eslint-config-next": "15.1.7",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5",
-    "gltf-pipeline": "^3.0.0",
-    "sharp": "^0.33.0",
-    "imagemin": "^8.0.1",
-    "imagemin-mozjpeg": "^10.0.0",
-    "imagemin-pngquant": "^9.0.2",
-    "imagemin-webp": "^8.0.0"
+    "typescript": "^5"
   }
 }
