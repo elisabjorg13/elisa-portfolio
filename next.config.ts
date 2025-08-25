@@ -8,12 +8,47 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     optimizePackageImports: ['@react-three/fiber', '@react-three/drei'],
+    turbo: {
+      rules: {
+        '*.glb': {
+          loaders: ['@next/gltf-loader'],
+          as: '*.glb',
+        },
+      },
+    },
   },
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   compress: true,
   poweredByHeader: false,
+  // Add performance optimizations
+  swcMinify: true,
+  // Enable gzip compression
+  compress: true,
+  // Optimize bundle splitting
+  webpack: (config, { dev, isServer }) => {
+    if (!dev && !isServer) {
+      // Split vendor chunks for better caching
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+          },
+          three: {
+            test: /[\\/]node_modules[\\/](three|@react-three)[\\/]/,
+            name: 'three',
+            chunks: 'all',
+            priority: 10,
+          },
+        },
+      };
+    }
+    return config;
+  },
 };
 
 export default nextConfig;
