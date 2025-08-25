@@ -18,7 +18,7 @@ interface ModelProps {
 }
 
 const Model = ({ onLabelChange }: ModelProps) => {
-  const { scene } = useGLTF("/models/me.glb");
+  const { scene } = useGLTF("/models/me_compressed.glb");
   const headBoneRef = useRef<Bone | null>(null);
   const bodyRef = useRef<Object3D | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -138,6 +138,6 @@ const Model = ({ onLabelChange }: ModelProps) => {
   );
 };
 
-useGLTF.preload("/models/me.glb");
+useGLTF.preload("/models/me_compressed.glb");
 
 export default Model;
