@@ -13,9 +13,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="preload" href="/models/me.glb" as="fetch" crossOrigin="anonymous" />
-        <link rel="preload" href="/models/computerwall.glb" as="fetch" crossOrigin="anonymous" />
-        <link rel="preload" href="/images/sky.hdr" as="image" />
+        <link rel="preload" href="/images/skypng.png" as="image" />
       </head>
       <body>
         {children}

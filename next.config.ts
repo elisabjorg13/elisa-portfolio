@@ -14,6 +14,15 @@ const nextConfig: NextConfig = {
   },
   compress: true,
   poweredByHeader: false,
+  // Enable bundle analyzer in production
+  ...(process.env.ANALYZE === 'true' && {
+    webpack: (config) => {
+      config.plugins.push(
+        new (require('@next/bundle-analyzer')())()
+      );
+      return config;
+    },
+  }),
 };
 
 export default nextConfig;
