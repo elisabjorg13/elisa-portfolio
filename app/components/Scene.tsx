@@ -134,9 +134,13 @@ const Scene = () => {
         >
           <div style={{ textAlign: "center" }}>
             <img
-              src="/images/loadingscreen.gif"
+              src="/images/loader.png"
               alt="Loading..."
-              style={{ width: "200px", height: "200px" }}
+              style={{ 
+                width: "600px", 
+                height: "600px",
+                animation: "stepRotate 1s steps(3, end) infinite"
+              }}
             />
             <div
               style={{
@@ -162,39 +166,6 @@ const Scene = () => {
                 }}
               ></span>
             </div>
-            {active && (
-              <div
-                style={{
-                  marginTop: "20px",
-                  fontSize: "0.9rem",
-                  color: "#666",
-                  fontFamily: "'Times New Roman', Times, serif",
-                }}
-              >
-                Loading 3D models... {typeof active === "number" ? Math.round(active * 100) : 0}%
-                <div
-                  style={{
-                    width: "200px",
-                    height: "4px",
-                    backgroundColor: "#e0e0e0",
-                    borderRadius: "2px",
-                    marginTop: "10px",
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: typeof active === "number" ? `${active * 100}%` : "0%",
-                      height: "100%",
-                      backgroundColor: "#3B82F6",
-                      borderRadius: "2px",
-                      transition: "width 0.3s ease",
-                    }}
-                  />
-                </div>
-              </div>
-            )}
           </div>
         </div>
       )}
@@ -230,7 +201,7 @@ const Scene = () => {
       </Canvas>
 
       {/* Legend for mobile */}
-      {isMobile && labels.length > 0 && (
+      {isMobile && !showLoading && labels.length > 0 && (
         <div
           style={{
             position: "fixed",
