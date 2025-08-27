@@ -94,7 +94,7 @@ const Paper = ({ position = [0, 0, 0], rotation = [0, 0, 0], onLabelChange }: Pa
       {!isMobile && hovered && (
         <Text
           position={[position[0], position[1] + 1.2, position[2]]}
-          fontSize={0.4}
+          fontSize={0.5}
           color="#E94DCC"
           anchorY="bottom"
           anchorX="center"

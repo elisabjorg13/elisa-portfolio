@@ -41,7 +41,7 @@ p{
 
 .dot-anim::after {
   content: '';
-  animation: dots 1s steps(3, end) infinite;
+  animation: dots 0.5s steps(3, end) infinite;
 }
 
 @keyframes dots {

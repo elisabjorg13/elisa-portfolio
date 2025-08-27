@@ -67,7 +67,7 @@ const BlenderMuseum = ({ position = [0, 0, 0], rotation = [0, 0, 0], onLabelChan
           object={scene}
           position={position}
           rotation={rotation}
-          scale={0.4}
+          scale={0.5}
           onPointerOver={() => setHovered(true)}
           onPointerOut={() => setHovered(false)}
         />
@@ -99,8 +99,8 @@ const BlenderMuseum = ({ position = [0, 0, 0], rotation = [0, 0, 0], onLabelChan
         {/* Show styled text on hover for desktop */}
         {!isMobile && hovered && (
           <Text
-            position={[position[0], position[1] + 2.8, position[2]]}
-            fontSize={0.4}
+            position={[position[0], position[1] + 3.5, position[2]]}
+            fontSize={0.7}
             color="#E94DCC"
             anchorY="bottom"
             anchorX="center"

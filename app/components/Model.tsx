@@ -123,7 +123,7 @@ const Model = ({ onLabelChange }: ModelProps) => {
       {!isMobile && hovered && (
         <Text
           position={[-1.1, -1.5 + 3.5, -1]}
-          fontSize={0.4}
+          fontSize={0.7}
           color="#E94DCC"
           anchorY="bottom"
           anchorX="center"

@@ -137,35 +137,11 @@ const Scene = () => {
               src="/images/loader.png"
               alt="Loading..."
               style={{ 
-                width: "600px", 
-                height: "600px",
+                width: "800px", 
+                height: "400px",
                 animation: "stepRotate 1s steps(3, end) infinite"
               }}
             />
-            <div
-              style={{
-                fontSize: "1rem",
-                fontFamily: "'Times New Roman', Times, serif",
-                color: "#000000",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                letterSpacing: "0.05em",
-                marginTop: "20px",
-              }}
-            >
-              <span style={{ minWidth: "7ch", textAlign: "right" }}>Loading</span>
-              <span
-                className="dot-anim"
-                style={{
-                  marginLeft: "0.2em",
-                  minWidth: "3ch",
-                  display: "inline-block",
-                  textAlign: "left",
-                  fontFamily: "'Times New Roman', Times, serif"
-                }}
-              ></span>
-            </div>
           </div>
         </div>
       )}
@@ -186,7 +162,7 @@ const Scene = () => {
         <CameraSetup />
         <ambientLight intensity={0.5} />
         <directionalLight position={[-2, 5, -2]} intensity={1} />
-        <BlenderMuseum position={[10, -1.65, 2]} rotation={[0, 1, 0]} onLabelChange={handleLabelChange} />
+        <BlenderMuseum position={[10, -1.40, 2]} rotation={[0, 1, 0]} onLabelChange={handleLabelChange} />
 
         <Model onLabelChange={handleLabelChange} />
         <Speaker position={[-8, -1.5, 0]} rotation={[0, Math.PI - 2.5, 0]} />
