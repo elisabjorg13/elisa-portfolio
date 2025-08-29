@@ -17,7 +17,7 @@ export default function ProjectsPage() {
   const isMobile = useIsMobile();
   return (
     <main
-      className={`h-screen w-full mx-auto flex flex-col items-start justify-start mt-2 md:mt-4 gap-4 md:gap-20 cursor-pointer ${isMobile ? 'text-sm' : 'text-base'}`}
+      className={`h-screen w-full mx-auto flex flex-col items-start justify-start mt-2 md:mt-4 gap-4 md:gap-20 cursor-pointer ${isMobile ? 'text-sm' : 'text-base'} pb-20`}
       style={{
         scrollbarWidth: 'none', /* Firefox */
         msOverflowStyle: 'none', /* Internet Explorer 10+ */
@@ -195,14 +195,14 @@ export default function ProjectsPage() {
                 className="h-auto"
               />
               <Image
-                src="/images/inkup2.png" // Must be in the public/ folder
+                src="/images/inkUp2.png" // Must be in the public/ folder
                 alt="Magic Wand"
                 width={isMobile?100:200}
                 height={isMobile?200:400}
                 className=" h-auto"
               />
             </div>
-            <div className={`text-justify flex flex-col gap-8 ${isMobile ? 'ml-8 mr-8' : 'ml-8 mr-24'}`}>
+            <div className={`text-justify flex flex-col gap-8 mb-8 ${isMobile ? 'ml-8 mr-8' : 'ml-8 mr-24'}`}>
               <p className="">
                 inkUp is a startup idea that was born when I took an
                 entrepreneurially focused course in the University of Iceland.
@@ -226,9 +226,9 @@ export default function ProjectsPage() {
                 and pitch, after getting artists and clients to take a number of
                 surveys in order to get more in depth knowledge on inkUp s
                 target market. I also designed the whole front end logic for the
-                application using Figma and using a mock database, implemented a
+                application using Figma and using a mock database, implemented a
                 mock version of the application using Adalo, which is
-                accesible here.
+                accesible here.
               </p>
             </div>
           </div>
