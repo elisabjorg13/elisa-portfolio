@@ -1,10 +1,8 @@
 "use client";
 import { Canvas, useThree } from "@react-three/fiber";
 import { Environment, OrbitControls } from "@react-three/drei";
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState } from "react";
 import { useProgress } from "@react-three/drei";
-import { suspend } from "suspend-react";
-import * as THREE from "three";
 
 import Model from "./Model";
 import Speaker from "./Speaker";
@@ -34,43 +32,18 @@ const CameraSetup = () => {
   const { camera } = useThree();
 
   useEffect(() => {
-    const radius = 14; // distance from center
+    const radius = 12; // distance from center
     const angle = Math.PI + 0.5; // ~22.5 degrees counterclockwise
 
     // Calculate new X/Z position (Y is unchanged here)
     const x = Math.sin(angle) * radius;
     const z = Math.cos(angle) * radius;
 
-    camera.position.set(x, 0, z); // orbit around center
+    camera.position.set(x, 2, z); // orbit around center
     camera.lookAt(0, 0, 0);
   }, [camera]);
 
   return null;
-};
-
-// Custom Skybox component for PNG files
-const Skybox = ({ isMobile }: { isMobile: boolean }) => {
-  const { scene } = useThree();
-  
-  useEffect(() => {
-    if (isMobile) {
-      // Create a simple skybox using PNG texture
-      const textureLoader = new THREE.TextureLoader();
-      textureLoader.load('/images/skypng.png', (texture) => {
-        texture.mapping = THREE.EquirectangularReflectionMapping;
-       
-        scene.environment = texture;
-      });
-    }
-  }, [isMobile, scene]);
-
-  return null;
-};
-
-// Compressed HDR component using pmndrs/assets
-const CompressedEnvironment = () => {
-  const sky = suspend(() => import('@pmndrs/assets/hdri/sky.exr'), []);
-  return <Environment files={sky.default} />;
 };
 
 const Scene = () => {
@@ -162,11 +135,9 @@ const Scene = () => {
         dpr={isMobile ? [1, 2] : [1, 2]}
       >
         {isMobile ? (
-          <Skybox isMobile={isMobile} />
+          <Environment files="/images/sky.hdr" />
         ) : (
-          <Suspense fallback={null}>
-            <CompressedEnvironment />
-          </Suspense>
+          <Environment files="/images/sky.hdr" />
         )}
         <CameraSetup />
         <ambientLight intensity={0.5} />
