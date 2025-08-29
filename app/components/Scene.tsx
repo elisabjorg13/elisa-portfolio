@@ -1,8 +1,9 @@
 "use client";
 import { Canvas, useThree } from "@react-three/fiber";
 import { Environment, OrbitControls } from "@react-three/drei";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useProgress } from "@react-three/drei";
+import { suspend } from "suspend-react";
 import * as THREE from "three";
 
 import Model from "./Model";
@@ -63,6 +64,12 @@ const Skybox = ({ isMobile }: { isMobile: boolean }) => {
   }, [isMobile, scene]);
 
   return null;
+};
+
+// Compressed HDR component using pmndrs/assets
+const CompressedEnvironment = () => {
+  const sky = suspend(() => import('@pmndrs/assets/hdri/sky.exr'), []);
+  return <Environment files={sky.default} />;
 };
 
 const Scene = () => {
@@ -156,7 +163,9 @@ const Scene = () => {
         {isMobile ? (
           <Skybox isMobile={isMobile} />
         ) : (
-          <Environment files="/images/sky.hdr" />
+          <Suspense fallback={null}>
+            <CompressedEnvironment />
+          </Suspense>
         )}
         <CameraSetup />
         <ambientLight intensity={0.5} />
