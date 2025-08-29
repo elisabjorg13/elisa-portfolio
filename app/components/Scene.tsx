@@ -3,6 +3,7 @@ import { Canvas, useThree } from "@react-three/fiber";
 import { Environment, OrbitControls } from "@react-three/drei";
 import { useEffect, useState } from "react";
 import { useProgress } from "@react-three/drei";
+import * as THREE from "three";
 
 import Model from "./Model";
 import Speaker from "./Speaker";
@@ -42,6 +43,24 @@ const CameraSetup = () => {
     camera.position.set(x, 2, z); // orbit around center
     camera.lookAt(0, 0, 0);
   }, [camera]);
+
+  return null;
+};
+
+// Custom Skybox component for PNG files (mobile only)
+const Skybox = ({ isMobile }: { isMobile: boolean }) => {
+  const { scene } = useThree();
+  
+  useEffect(() => {
+    if (isMobile) {
+      // Create a simple skybox using PNG texture
+      const textureLoader = new THREE.TextureLoader();
+      textureLoader.load('/images/skypng.png', (texture) => {
+        texture.mapping = THREE.EquirectangularReflectionMapping;
+        scene.environment = texture;
+      });
+    }
+  }, [isMobile, scene]);
 
   return null;
 };
@@ -135,7 +154,7 @@ const Scene = () => {
         dpr={isMobile ? [1, 2] : [1, 2]}
       >
         {isMobile ? (
-          <Environment files="/images/sky.hdr" />
+          <Skybox isMobile={isMobile} />
         ) : (
           <Environment files="/images/sky.hdr" />
         )}
