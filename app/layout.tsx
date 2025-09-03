@@ -16,8 +16,6 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap" rel="stylesheet" />
-        <link rel="preload" href="/models/computer1.glb" as="fetch" crossOrigin="anonymous" />
-        <link rel="preload" href="/images/sky.hdr" as="image" />
       </head>
       <body>
         {children}

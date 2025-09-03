@@ -107,6 +107,6 @@ const Computer1 = ({ position = [0, 0, 0], rotation = [0, 0, 0], onLabelChange }
   );
 };
 
-useGLTF.preload("/models/computerwall.glb");
+useGLTF.preload("/models/computer1.glb");
 
 export default Computer1;
