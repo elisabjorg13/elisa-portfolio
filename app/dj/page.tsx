@@ -12,6 +12,20 @@ export default function DJPage() {
   };
   const [menu, setMenu] = useState<'ELYSIUM' | 'DJ ÓK'>('ELYSIUM');
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [lastAngle, setLastAngle] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const wheelRef = useRef<HTMLDivElement>(null);
+
+  // Simple device detection
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 700 || /Mobi|Android/i.test(navigator.userAgent));
+    check(); // Check immediately
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+  
   const mixes = [
     {
       title: "DJ örsi jersey club mix - Drif Radio",
@@ -81,6 +95,93 @@ export default function DJPage() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
+  // Calculate angle from center of wheel to mouse/touch point
+  const getAngle = (clientX: number, clientY: number) => {
+    if (!wheelRef.current) return 0;
+    
+    const rect = wheelRef.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    const deltaX = clientX - centerX;
+    const deltaY = clientY - centerY;
+    
+    return Math.atan2(deltaY, deltaX);
+  };
+
+  // Handle wheel rotation
+  const handleWheelRotation = (clientX: number, clientY: number) => {
+    const currentAngle = getAngle(clientX, clientY);
+    const angleDiff = currentAngle - lastAngle;
+    
+    // Normalize angle difference to handle wrapping around
+    let normalizedDiff = angleDiff;
+    if (normalizedDiff > Math.PI) normalizedDiff -= 2 * Math.PI;
+    if (normalizedDiff < -Math.PI) normalizedDiff += 2 * Math.PI;
+    
+    // Threshold for movement (prevents tiny movements from triggering)
+    if (Math.abs(normalizedDiff) > 0.1) {
+      if (normalizedDiff > 0) {
+        // Clockwise - go to next song
+        goToNext();
+      } else {
+        // Counter-clockwise - go to previous song
+        goToPrevious();
+      }
+    }
+    
+    setLastAngle(currentAngle);
+  };
+
+  // Mouse events
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    setLastAngle(getAngle(e.clientX, e.clientY));
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (isDragging) {
+      handleWheelRotation(e.clientX, e.clientY);
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  // Touch events for mobile
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 1) {
+      setIsDragging(true);
+      setLastAngle(getAngle(e.touches[0].clientX, e.touches[0].clientY));
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (isDragging && e.touches.length === 1) {
+      e.preventDefault(); // Prevent scrolling
+      handleWheelRotation(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+  };
+
+  // Add global mouse/touch listeners
+  useEffect(() => {
+    const handleGlobalMouseUp = () => setIsDragging(false);
+    const handleGlobalTouchEnd = () => setIsDragging(false);
+
+    document.addEventListener('mouseup', handleGlobalMouseUp);
+    document.addEventListener('touchend', handleGlobalTouchEnd);
+
+    return () => {
+      document.removeEventListener('mouseup', handleGlobalMouseUp);
+      document.removeEventListener('touchend', handleGlobalTouchEnd);
+    };
+  }, []);
+
   // When menu changes, select the first item
   useEffect(() => {
     setSelectedIndex(0);
@@ -91,13 +192,17 @@ export default function DJPage() {
   useEffect(() => {
     const newItem = currentList[selectedIndex];
     setCurrentItem(newItem);
+    setIsLoading(true);
   
-    if (isPlaying && audioRef.current) {
+    if (audioRef.current) {
       const audio = audioRef.current;
   
       // Clean up previous listeners
       const handleCanPlay = () => {
-        audio.play().catch((err) => console.warn("Play failed:", err));
+        setIsLoading(false);
+        if (isPlaying) {
+          audio.play().catch((err) => console.warn("Play failed:", err));
+        }
         audio.removeEventListener("canplaythrough", handleCanPlay);
       };
   
@@ -131,8 +236,8 @@ export default function DJPage() {
   const goToPrevious = () => {
     if (currentIndex > 0) {
       setSelectedIndex(currentIndex - 1);
-      // Do NOT auto-play
-      setIsPlaying(false);
+      // Auto-play the previous song
+      setIsPlaying(true);
     }
   };
 
@@ -146,7 +251,7 @@ export default function DJPage() {
 
   return (
     <main className="w-screen vh-100 h-screen flex items-center justify-center" style={{ cursor: 'pointer' }}>
-      <div className="bg-[#ffffff] w-full h-full  p-4 flex flex-col justify-between">
+      <div className={`bg-[#ffffff] w-full h-full p-4 flex flex-col ${isMobile ? 'justify-start' : 'justify-between'}`}>
         {/* iPod Screen Split */}
         <div className="relative bg-white border-2 border-[#d9d9d9] rounded-md p-4 h-[60%] overflow-auto flex flex-row justify-start items-start">
           {/* Left menu */}
@@ -202,22 +307,36 @@ export default function DJPage() {
           </div>
         </div>
         {/* Controller and wheel remain unchanged below */}
-        <div className="relative flex flex-col items-center justify-center">
+        <div className={`relative flex flex-col items-center ${isMobile ? 'justify-start mt-8' : 'justify-center'}`}>
           {/* Circular Insta/Cloud buttons above the wheel */}
 
           {/* Click Wheel */}
-          <div className="w-60 h-60 bg-[#d9d9d9] rounded-full flex flex-col items-center justify-center gap-2 text-center relative">
+          <div 
+            ref={wheelRef}
+            className="w-40 h-40 md:w-60 md:h-60 bg-[#d9d9d9] rounded-full flex flex-col items-center justify-center gap-2 text-center relative cursor-pointer select-none"
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            style={{ 
+              userSelect: 'none',
+              touchAction: 'none' // Prevents default touch behaviors
+            }}
+          >
             {/* Insta and Cloud buttons on the wheel, flanking HOME */}
             <button
-              className={`w-16 h-16 rounded-full flex items-center justify-center shadow font-bold text-xs absolute left-0 top-4 z-10
+              className={`w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center shadow font-bold text-[8px] md:text-xs absolute left-0 top-4 z-10 p-1 md:p-3
                 ${menu === 'ELYSIUM'
                   ? 'bg-[#f8f8f8] border-2 border-customBlue text-customBlue hover:bg-customBlue hover:text-white transition-colors cursor-pointer font-serif'
                   : menu === 'DJ ÓK'
                   ? 'bg-[#f8f8f8] border-2 border-customBlue text-customBlue hover:bg-customBlue hover:text-white transition-colors cursor-pointer font-serif'
                   : 'bg-[#f8f8f8] border-2 border-[#e0e0e0] text-gray-400 hover:border-gray-400 hover:text-gray-500 transition-colors font-serif'}
               `}
-              style={{ transform: 'translate(-50%, 0)', textTransform: 'uppercase', letterSpacing: '0.1em', pointerEvents: menu === 'ELYSIUM' || menu === 'DJ ÓK' ? 'auto' : 'none', padding: '0.75rem' }}
-              onClick={() => {
+              style={{ transform: 'translate(-50%, 0)', textTransform: 'uppercase', letterSpacing: '0.1em', pointerEvents: menu === 'ELYSIUM' || menu === 'DJ ÓK' ? 'auto' : 'none' }}
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent wheel rotation when clicking buttons
                 if (menu === 'ELYSIUM') {
                   window.open('https://www.instagram.com/', '_blank');
                 } else if (menu === 'DJ ÓK') {
@@ -225,18 +344,19 @@ export default function DJPage() {
                 }
               }}
             >
-              <span className="text-xs md:text-sm">Insta</span>
+              <span className="text-[10px] md:text-sm">Insta</span>
             </button>
             <button
-              className={`w-16 h-16 rounded-full flex items-center justify-center shadow font-bold text-xs absolute right-0 top-4 z-10
+              className={`w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center shadow font-bold text-[8px] md:text-xs absolute right-0 top-4 z-10 p-1 md:p-3
                 ${menu === 'ELYSIUM'
                   ? 'bg-[#f8f8f8] border-2 border-customBlue text-customBlue hover:bg-customBlue hover:text-white transition-colors cursor-pointer font-serif'
                   : menu === 'DJ ÓK'
                   ? 'bg-[#f8f8f8] border-2 border-customBlue text-customBlue hover:bg-customBlue hover:text-white transition-colors cursor-pointer font-serif'
                   : 'bg-[#f8f8f8] border-2 border-[#e0e0e0] text-gray-400 hover:border-gray-400 hover:text-gray-500 transition-colors font-serif'}
               `}
-              style={{ transform: 'translate(50%, 0)', textTransform: 'uppercase', letterSpacing: '0.1em', pointerEvents: menu === 'ELYSIUM' || menu === 'DJ ÓK' ? 'auto' : 'none', padding: '0.75rem' }}
-              onClick={() => {
+              style={{ transform: 'translate(50%, 0)', textTransform: 'uppercase', letterSpacing: '0.1em', pointerEvents: menu === 'ELYSIUM' || menu === 'DJ ÓK' ? 'auto' : 'none' }}
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent wheel rotation when clicking buttons
                 if (menu === 'ELYSIUM') {
                   window.open('https://soundcloud.com/elysium-001', '_blank');
                 } else if (menu === 'DJ ÓK') {
@@ -244,12 +364,15 @@ export default function DJPage() {
                 }
               }}
             >
-              <span className="text-xs md:text-sm">Cloud</span>
+              <span className="text-[10px] md:text-sm">Cloud</span>
             </button>
             {/* Disable prev, next, play/pause, back when on main menu */}
             <button
               className="absolute left-2 text-xl"
-              onClick={goToPrevious}
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent wheel rotation
+                goToPrevious();
+              }}
               disabled={currentIndex === 0}
               style={currentIndex === 0 ? { opacity: 0.5, pointerEvents: 'none' } : {}}
             >
@@ -267,7 +390,10 @@ export default function DJPage() {
             </button>
             <button
               className="absolute right-2 text-xl"
-              onClick={goToNext}
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent wheel rotation
+                goToNext();
+              }}
               disabled={currentIndex === currentList.length - 1}
               style={currentIndex === currentList.length - 1 ? { opacity: 0.5, pointerEvents: 'none' } : {}}
             >
@@ -284,12 +410,17 @@ export default function DJPage() {
               </svg>
             </button>
             <button
-              className="absolute ml-2 bottom-2"
-              onClick={togglePlayback}
-              disabled={currentList.length === 0}
-              style={currentList.length === 0 ? { opacity: 0.5, pointerEvents: 'none' } : {}}
+              className={`absolute bottom-2 ${isMobile ? 'ml-0' : 'ml-1'}`}
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent wheel rotation
+                togglePlayback();
+              }}
+              disabled={currentList.length === 0 || isLoading}
+              style={currentList.length === 0 || isLoading ? { opacity: 0.5, pointerEvents: 'none' } : {}}
             >
-              {isPlaying ? (
+              {isLoading ? (
+                <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              ) : isPlaying ? (
                 <svg
                   width={18}
                   height={28}
@@ -317,15 +448,18 @@ export default function DJPage() {
             {/* HOME always enabled */}
             <button
               className="text-lg  absolute top-2 left-1/2 -translate-x-1/2"
-              onClick={handleClickHome}
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent wheel rotation
+                handleClickHome();
+              }}
             >
               <p className="text-white text-xs md:text-sm">HOME</p>
             </button>
-            <div className="w-20 h-20 bg-[#f8f8f8] rounded-full shadow-inner" />
+            <div className="w-16 h-16 md:w-20 md:h-20 bg-[#f8f8f8] rounded-full shadow-inner" />
           </div>
         </div>
       </div>
-      <audio ref={audioRef} src={currentItem.stream} preload="auto" />
+      <audio ref={audioRef} preload="none" />
     </main>
   );
 }
