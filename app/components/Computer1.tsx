@@ -16,14 +16,22 @@ interface Computer1Props {
   position?: [number, number, number];
   rotation?: [number, number, number];
   onLabelChange?: (labelInfo: LabelInfo) => void;
+  onLoad?: () => void;
 }
 
-  const Computer1 = ({ position = [0, 0, 0], rotation = [0, 0, 0], onLabelChange }: Computer1Props) => {
+  const Computer1 = ({ position = [0, 0, 0], rotation = [0, 0, 0], onLabelChange, onLoad }: Computer1Props) => {
     const { scene } = useGLTF("/models/computer1_more_compressed.glb");
   const speakerRef = useRef<Object3D | null>(null);
   const [hovered, setHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
+
+  // Call onLoad when model is ready
+  useEffect(() => {
+    if (onLoad) {
+      onLoad();
+    }
+  }, [onLoad]);
 
   // Mobile detection
   useEffect(() => {

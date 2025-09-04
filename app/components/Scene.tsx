@@ -77,8 +77,7 @@ const Scene = () => {
   const [showLoading, setShowLoading] = useState(true);
   const [minTimePassed, setMinTimePassed] = useState(false);
   const [labels, setLabels] = useState<Array<{id: number, label: string}>>([]);
-  // const [modelsLoaded, setModelsLoaded] = useState(0);
-  // const totalModels = 8; // Total number of 3D models
+  const [loadedModels, setLoadedModels] = useState<Set<string>>(new Set());
   const isMobile = useIsMobile();
 
   useEffect(() => {
@@ -92,17 +91,17 @@ const Scene = () => {
   }, [active]);
 
   useEffect(() => {
-    if (!active && minTimePassed) {
+    // Show loading until at least one model is loaded and minimum time has passed
+    if (loadedModels.size > 0 && minTimePassed) {
       setShowLoading(false);
-    } else if (active) {
+    } else if (loadedModels.size === 0) {
       setShowLoading(true);
     }
-  }, [active, minTimePassed]);
+  }, [loadedModels.size, minTimePassed]);
 
-  // Track when models are loaded (you can call this from individual model components)
-  // const handleModelLoad = () => {
-  //   setModelsLoaded(prev => prev + 1);
-  // };
+  const handleModelLoad = (modelName: string) => {
+    setLoadedModels(prev => new Set([...prev, modelName]));
+  };
 
   const handleLabelChange = (labelInfo: {id: number, label: string, position: [number, number, number]}) => {
     setLabels(prev => {
@@ -170,17 +169,40 @@ const Scene = () => {
         <CameraSetup />
         <ambientLight intensity={0.5} />
         <directionalLight position={[-2, 5, -2]} intensity={1} />
-        <BlenderMuseum position={[10, -1.40, 2]} rotation={[0, 1, 0]} onLabelChange={handleLabelChange} />
+        
+        {/* Models appear progressively as they load */}
+        <Suspense fallback={null}>
+          <BlenderMuseum position={[10, -1.40, 2]} rotation={[0, 1, 0]} onLabelChange={handleLabelChange} />
+        </Suspense>
 
-        <Model onLabelChange={handleLabelChange} />
-        <Speaker position={[-8, -1.5, 0]} rotation={[0, Math.PI - 2.5, 0]} />
-        <Speaker2 position={[4, -1.5, -6.5]} rotation={[0, Math.PI - 0.5, 0]} />
+        <Suspense fallback={null}>
+          <Model onLabelChange={handleLabelChange} onLoad={() => handleModelLoad('model')} />
+        </Suspense>
+        
+        <Suspense fallback={null}>
+          <Speaker position={[-8, -1.5, 0]} rotation={[0, Math.PI - 2.5, 0]} />
+        </Suspense>
+        
+        <Suspense fallback={null}>
+          <Speaker2 position={[4, -1.5, -6.5]} rotation={[0, Math.PI - 0.5, 0]} />
+        </Suspense>
 
-        <Computer1 position={[-5, -2.3, 6]} rotation={[0, Math.PI + 2.6, 0]} onLabelChange={handleLabelChange} />
-        {/* <Arrow position={[5, 5, 0]} rotation={[0, Math.PI / 2 - 2.5, 0]} /> */}
-        <Controller position={[1.5, -2, -5]} rotation={[0, Math.PI - 1.4, 0]} onLabelChange={handleLabelChange} />
-        <Paper position={[-5, -2.5, -3]} rotation={[0, 0.7, 0]} onLabelChange={handleLabelChange}></Paper>
-        <Stairway position={[0, -2.83, 1.5]} rotation={[0, -1.1, 0]}></Stairway>
+        <Suspense fallback={null}>
+          <Computer1 position={[-5, -2.3, 6]} rotation={[0, Math.PI + 2.6, 0]} onLabelChange={handleLabelChange} onLoad={() => handleModelLoad('computer1')} />
+        </Suspense>
+        
+        <Suspense fallback={null}>
+          <Controller position={[1.5, -2, -5]} rotation={[0, Math.PI - 1.4, 0]} onLabelChange={handleLabelChange} />
+        </Suspense>
+        
+        <Suspense fallback={null}>
+          <Paper position={[-5, -2.5, -3]} rotation={[0, 0.7, 0]} onLabelChange={handleLabelChange}></Paper>
+        </Suspense>
+        
+        <Suspense fallback={null}>
+          <Stairway position={[0, -2.83, 1.5]} rotation={[0, -1.1, 0]}></Stairway>
+        </Suspense>
+        
         <OrbitControls enablePan={false} enableZoom={true} enableRotate={true} />
       </Canvas>
 

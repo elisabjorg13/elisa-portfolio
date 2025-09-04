@@ -15,9 +15,10 @@ interface LabelInfo {
 
 interface ModelProps {
   onLabelChange?: (labelInfo: LabelInfo) => void;
+  onLoad?: () => void;
 }
 
-  const Model = ({ onLabelChange }: ModelProps) => {
+  const Model = ({ onLabelChange, onLoad }: ModelProps) => {
     const { scene } = useGLTF("/models/me_more_compressed.glb");
   const headBoneRef = useRef<Bone | null>(null);
   const bodyRef = useRef<Object3D | null>(null);
@@ -25,6 +26,13 @@ interface ModelProps {
   const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
   const [hovered, setHovered] = useState(false);
+
+  // Call onLoad when model is ready
+  useEffect(() => {
+    if (onLoad) {
+      onLoad();
+    }
+  }, [onLoad]);
 
   // Mobile detection
   useEffect(() => {
