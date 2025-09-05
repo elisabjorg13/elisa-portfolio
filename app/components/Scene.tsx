@@ -153,8 +153,9 @@ const Scene = () => {
       <Canvas
         style={{
           width: isMobile ? "100vw" : "100vw",
-          height: isMobile ? "60vh" : "100vh",
+          height: isMobile ? "80vh" : "100vh",
           maxWidth: isMobile ? 500 : undefined,
+          paddingBottom: isMobile ? "20vh" : "0",
           display: "block",
         }}
         dpr={isMobile ? [1, 2] : [1, 2]}
@@ -212,16 +213,16 @@ const Scene = () => {
           style={{
             position: "fixed",
             width: "full",
-            bottom: "20px",
+            bottom: "0px",
             left: "0",
             right: "0",
-            backgroundColor: "#90EE90",
-            border: "2px solid #ffffff",
-            borderRadius: "8px",
+            background: "linear-gradient(135deg, #f8fff8 0%, #f0fff0 50%, #e8ffe8 100%)",
+            border: "1px solid #ffffff",
+            borderRadius: "4px",
             padding: "15px 20px",
             boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
             zIndex: 100,
-            margin: "0 20px",
+            margin: "10px 10px",
           }}
         >
           <div

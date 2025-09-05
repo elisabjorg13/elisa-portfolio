@@ -33,17 +33,17 @@ export default function ProjectsPage() {
         <h1 className={isMobile ? "text-xl" : "text-3xl"}>Projects - Content</h1>
         <div>
           <h2>Work From Home studios</h2>
-          <p className={`${isMobile ? 'text-center' : 'mr-24'}`}>
+          <p className={`${isMobile ? 'text-left' : 'mr-24'}`}>
             Work From Home Studios I cofounded with Katrín Hersisdóttir. It is a
             web design studio where I implement websites for various brands and
             artists.
           </p>
-          <div className={`flex flex-col mt-4 gap-4 ${isMobile ? 'items-center' : ''}`}>
+          <div className={`flex flex-col mt-4 gap-4 ${isMobile ? 'text-left' : ''}`}>
             <a
               href="https://www.suskin.is"
               target="_blank"
               rel="noopener noreferrer"
-              className={`text-customPurple hover:underline ${isMobile ? 'text-base' : 'text-xl'}`}
+              className={`text-customPurple hover:underline ${isMobile ? 'text-base  ml-10' : ' ml-8 text-xl'}`}
             >
               Suskin.is
             </a>
@@ -64,12 +64,12 @@ export default function ProjectsPage() {
               />
             </div>
           </div>
-          <div className={`flex flex-col mt-4 gap-4 ${isMobile ? 'items-center' : ''}`}>
+          <div className={`flex flex-col mt-4 gap-4 ${isMobile ? 'text-left' : ''}`}>
             <a
               href="https://www.katrinhers.is"
               target="_blank"
               rel="noopener noreferrer"
-              className={`text-customPurple hover:underline ${isMobile ? 'text-base' : 'text-xl'}`}
+              className={`text-customPurple hover:underline ${isMobile ? 'text-base ml-10' : ' ml-8 text-xl'}`}
             >
               Katrinhers.is
             </a>
@@ -107,7 +107,7 @@ export default function ProjectsPage() {
                 className=" h-auto"
               />
             </div>
-            <div className={`text-justify ${isMobile ? 'mr-8' : 'ml-8 mr-24'}`}>
+            <div className={`text-justify ${isMobile ? 'mr-8 ml-8' : 'ml-0 mr-24'}`}>
               <p>
                 During my time working for indo I gained experience in
                 programming with Flutter, which was used to develop the front
@@ -131,7 +131,7 @@ export default function ProjectsPage() {
         </div>
         <div>
           <h2>Linear Regression</h2>
-          <div className="flex flex-col gap-4 ml-8 items-center">
+          <div className="flex flex-col gap-4 items-center">
             <div className="flex flex-row gap-4 items-center">
               <Image
                 src="/images/pikkolo .png" // Must be in the public/ folder
@@ -141,7 +141,7 @@ export default function ProjectsPage() {
                 className=" h-auto"
               />
             </div>
-            <div className={`text-justify flex flex-col gap-8 ${isMobile ? 'mr-8' : 'ml-8 mr-24'}`}>
+            <div className={`text-justify flex flex-col gap-8 ${isMobile ? 'mr-8 ml-8' : 'ml-0 mr-24'}`}>
               <div className="flex flex-col gap-2">
                 <p>Motivation</p>
                 <p>
@@ -202,7 +202,7 @@ export default function ProjectsPage() {
                 className=" h-auto"
               />
             </div>
-            <div className={`text-justify flex flex-col gap-8 mb-8 ${isMobile ? 'ml-8 mr-8' : 'ml-8 mr-24'}`}>
+            <div className={`text-justify flex flex-col gap-8 mb-8 ${isMobile ? 'ml-8 mr-8' : ' mr-24'}`}>
               <p className="">
                 inkUp is a startup idea that was born when I took an
                 entrepreneurially focused course in the University of Iceland.

@@ -9,6 +9,7 @@ export default function DJPage() {
     title: string;
     link: string;
     stream: string;
+    startTime?: number; // Start time in seconds
   };
   const [menu, setMenu] = useState<'ELYSIUM' | 'DJ ÓK'>('ELYSIUM');
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -32,6 +33,7 @@ export default function DJPage() {
       link: "https://www.youtube.com/watch?v=eIiaiu_8EAc&list=RDeIiaiu_8EAc&start_radio=1&t=2307s",
       stream:
         "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/Music/ytdl.canehill.info+-+DJ+O%CC%88RSI%CC%81+DRIF+(16+Jun+2024)+(320+KBps)-trimmed.mp3",
+      startTime: 1189, // Start at 19:39 (19*60 + 39 = 1179 seconds)
     },
     {
       title: "DJ ÓK mix 002 - Drif Radio",
@@ -44,12 +46,14 @@ export default function DJPage() {
       link: "https://soundcloud.com/egreg-re/dj-ok-drum-pilled-fevrier-2025?si=680048eb7ba9453baeec2e3be30692ee&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
       stream:
         "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/Music/DJ+OK+-+Drum+Pilled+(Fe%CC%81vrier+2025).mp3",
+      startTime: 30, // Start at 30 seconds
     },
     {
       title: "DJ ÓK Cellar mix",
       link: "https://soundcloud.com/djok-889666396/cellarmix?si=7d7ca63bdb5447afadc08545aeee185b&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
       stream:
         "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/Music/CellarMix.mp3",
+      startTime: 45, // Start at 45 seconds
     },
     {
       title: "ELYSIUM Promising young woman - Egregore",
@@ -200,6 +204,12 @@ export default function DJPage() {
       // Clean up previous listeners
       const handleCanPlay = () => {
         setIsLoading(false);
+        
+        // Set start time if specified
+        if ((newItem as TrackItem).startTime && (newItem as TrackItem).startTime! > 0) {
+          audio.currentTime = (newItem as TrackItem).startTime!;
+        }
+        
         if (isPlaying) {
           audio.play().catch((err) => console.warn("Play failed:", err));
         }
