@@ -16,13 +16,21 @@ function useIsMobile() {
 export default function ProjectsPage() {
   const isMobile = useIsMobile();
   return (
-    <main
-      className={`h-screen w-full mx-auto flex flex-col items-start justify-start mt-2 md:mt-4 gap-4 md:gap-20 cursor-pointer ${isMobile ? 'text-sm' : 'text-base'} pb-20`}
-      style={{
-        scrollbarWidth: 'none', /* Firefox */
-        msOverflowStyle: 'none', /* Internet Explorer 10+ */
-      }}
-    >
+    <>
+      <style jsx>{`
+        @media (min-width: 1920px) {
+          .text-container {
+            max-width: 70% !important;
+          }
+        }
+      `}</style>
+      <main
+        className={`h-screen w-full mx-auto flex flex-col items-start justify-start mt-2 md:mt-4 gap-4 md:gap-20 cursor-pointer ${isMobile ? 'text-sm' : 'text-base'} pb-20`}
+        style={{
+          scrollbarWidth: 'none', /* Firefox */
+          msOverflowStyle: 'none', /* Internet Explorer 10+ */
+        }}
+      >
       <div
         className={`flex flex-col gap-4 md:gap-10 ${isMobile ? 'px-4' : 'ml-20 mr-10'}`}
         style={{
@@ -33,7 +41,7 @@ export default function ProjectsPage() {
         <h1 className={isMobile ? "text-xl" : "text-3xl"}>Projects - Content</h1>
         <div>
           <h2>Work From Home studios</h2>
-          <p className={`${isMobile ? 'text-left' : 'mr-24'}`}>
+          <p className={`text-container ${isMobile ? 'text-left' : 'mr-24'}`}>
             Work From Home Studios I cofounded with Katrín Hersisdóttir. It is a
             web design studio where I implement websites for various brands and
             artists.
@@ -107,21 +115,21 @@ export default function ProjectsPage() {
                 className=" h-auto"
               />
             </div>
-            <div className={`text-justify ${isMobile ? 'mr-8 ml-8' : 'ml-0 mr-24'}`}>
+            <div className={`text-container text-justify ${isMobile ? 'mr-8 ml-8' : 'ml-0 mr-24'}`}>
               <p>
                 During my time working for indo I gained experience in
-                programming with Flutter, which was used to develop the front
+                programming with Flutter, which was used to develop the front
                 end of their application. Since I was new to the programming
-                using Flutter, my first tasks revolved around all sorts of bug
+                using Flutter, my first tasks revolved around all sorts of bug
                 fixes in order to learn to navigate through the application and
                 learn the basics. As my knowledge grew deeper I was trusted with
                 larger tasks, and the most important feature I was trusted with
                 was the currency converter, which I also got to design
-                using Figma.
+                using Figma.
               </p>
               <p>
                 It uses a backend API that regularly updates each currency,
-                which is sourced from Enfuce. The converter has a larger
+                which is sourced from Enfuce. The converter has a larger
                 selection of curencies than any other icelandic bank app, and
                 prioritizes most recently used currencies to optimize the client
                 experience.
@@ -141,11 +149,11 @@ export default function ProjectsPage() {
                 className=" h-auto"
               />
             </div>
-            <div className={`text-justify flex flex-col gap-8 ${isMobile ? 'mr-8 ml-8' : 'ml-0 mr-24'}`}>
+            <div className={`text-container text-justify flex flex-col gap-8 ${isMobile ? 'mr-8 ml-8' : 'ml-0 mr-24'}`}>
               <div className="flex flex-col gap-2">
                 <p>Motivation</p>
                 <p>
-                  Pikkoló strives for a more sustainable future in grocery
+                  Pikkoló strives for a more sustainable future in grocery
                   shopping by letting users pick up grocery orders in stations
                   located near them, thus minimizing air pollution and
                   encouraging users to be less dependent on daily car travels.
@@ -159,7 +167,7 @@ export default function ProjectsPage() {
               <div className="flex flex-col gap-2">
                 <p>Method</p>
                 <p>
-                  Linear regression was performed on data we found appropriate
+                  Linear regression was performed on data we found appropriate
                   for the project, sourced from the geographic information
                   system of Reykjavik and the GPS system TomTom. Data
                   analization and Linear Regression was performed using R and
@@ -171,7 +179,7 @@ export default function ProjectsPage() {
               <div className="flex flex-col gap-2">
                 <p>Outcome</p>
                 <p>
-                  Linear regression was performed on data we found appropriate
+                  Linear regression was performed on data we found appropriate
                   for the project, sourced from the geographic information
                   system of Reykjavik and the GPS system TomTom. Data
                   analization and Linear Regression was performed using R and
@@ -202,7 +210,7 @@ export default function ProjectsPage() {
                 className=" h-auto"
               />
             </div>
-            <div className={`text-justify flex flex-col gap-8 mb-8 ${isMobile ? 'ml-8 mr-8' : ' mr-24'}`}>
+            <div className={`text-container text-justify flex flex-col gap-8 mb-8 ${isMobile ? 'ml-8 mr-8' : ' mr-24'}`}>
               <p className="">
                 inkUp is a startup idea that was born when I took an
                 entrepreneurially focused course in the University of Iceland.
@@ -235,5 +243,6 @@ export default function ProjectsPage() {
         </div>
       </div>
     </main>
+    </>
   );
 }

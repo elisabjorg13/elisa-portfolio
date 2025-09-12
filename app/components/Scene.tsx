@@ -1,7 +1,7 @@
 "use client";
 import { Canvas, useThree } from "@react-three/fiber";
 import { Environment, OrbitControls } from "@react-three/drei";
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState, Suspense, useRef } from "react";
 import { useProgress } from "@react-three/drei";
 import { suspend } from "suspend-react";
 import * as THREE from "three";
@@ -78,6 +78,9 @@ const Scene = () => {
   const [minTimePassed, setMinTimePassed] = useState(false);
   const [labels, setLabels] = useState<Array<{id: number, label: string}>>([]);
   const [loadedModels, setLoadedModels] = useState<Set<string>>(new Set());
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audioLoaded, setAudioLoaded] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const isMobile = useIsMobile();
 
   useEffect(() => {
@@ -111,6 +114,25 @@ const Scene = () => {
     });
   };
 
+  // Preload audio for instant playback
+  useEffect(() => {
+    const audio = new Audio('https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/Music/elisa_vefsidaMP3.mp3');
+    audio.preload = 'auto';
+    audio.loop = true;
+    audio.volume = 0.3; // Lower volume so it doesn't interfere
+    
+    audio.addEventListener('canplaythrough', () => {
+      setAudioLoaded(true);
+    });
+    
+    audioRef.current = audio;
+    
+    return () => {
+      audio.pause();
+      audio.removeEventListener('canplaythrough', () => {});
+    };
+  }, []);
+
   // Preload all models for faster loading
   useEffect(() => {
     // Preload all model files
@@ -131,6 +153,18 @@ const Scene = () => {
       fetch(model, { method: 'HEAD' }).catch(() => {});
     });
   }, []);
+
+  const toggleAudio = () => {
+    if (!audioRef.current) return;
+    
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      audioRef.current.play().catch(() => {});
+      setIsPlaying(true);
+    }
+  };
 
   return (
     <div
@@ -171,6 +205,51 @@ const Scene = () => {
           </div>
         </div>
       )}
+      
+      {/* Sound Toggle Button */}
+      <button
+        onClick={toggleAudio}
+        disabled={!audioLoaded}
+        style={{
+          position: 'fixed',
+          top: '20px',
+          right: '20px',
+          zIndex: 1000,
+          width: '100px',
+          height: '100px',
+          borderRadius: '50%',
+          border: '2px solid white',
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          color: '#333',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: audioLoaded ? 'pointer' : 'not-allowed',
+          opacity: audioLoaded ? 1 : 0.5,
+          transition: 'all 0.3s ease',
+          fontSize: '20px',
+          fontFamily: "'Times New Roman', Times, serif",
+        }}
+        onMouseEnter={(e) => {
+          if (audioLoaded) {
+            e.currentTarget.style.transform = 'scale(1.1)';
+            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 1)';
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (audioLoaded) {
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+          }
+        }}
+      >
+        <img 
+          src={isPlaying ? '/images/speaker_icon_black.png' : '/images/speaker_icon_sound_off.png'} 
+          alt={isPlaying ? 'Sound On' : 'Sound Off'} 
+          style={{ width: isMobile ? '50px' : '80px', height: isMobile ? '50px' : '80px' }} 
+        />
+      </button>
+      
       <Canvas
         style={{
           width: isMobile ? "100vw" : "100vw",
