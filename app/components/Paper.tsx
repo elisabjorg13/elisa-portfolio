@@ -49,6 +49,7 @@ const Paper = ({ position = [0, 0, 0], rotation = [0, 0, 0], onLabelChange }: Pa
     }
   }, [onLabelChange, position]);
 
+
   const handleClick = () => {
     router.push("/cv");
   };

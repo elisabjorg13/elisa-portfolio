@@ -111,6 +111,27 @@ const Scene = () => {
     });
   };
 
+  // Preload all models for faster loading
+  useEffect(() => {
+    // Preload all model files
+    const models = [
+      '/models/me_more_compressed.glb',
+      '/models/Speakers_compressed.glb', 
+      '/models/Speakers2_compressed.glb',
+      '/models/computer1_more_compressed.glb',
+      '/models/computer2.glb',
+      '/models/paper.glb',
+      '/models/glass_compressed.glb',
+      '/models/blendermuseum.glb',
+      '/models/controller.glb'
+    ];
+    
+    models.forEach(model => {
+      // Start preloading each model
+      fetch(model, { method: 'HEAD' }).catch(() => {});
+    });
+  }, []);
+
   return (
     <div
       style={{

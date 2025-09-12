@@ -7,11 +7,8 @@ import { Object3D } from "three";
 
 
 const Speaker2 = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
-  const { scene } = useGLTF("/models/Speakers2.glb");
+  const { scene } = useGLTF("/models/Speakers2_compressed.glb");
   const speaker2Ref = useRef<Object3D | null>(null);
-
-
-  // Removed useEffect for cursor logic
 
 
   return (
@@ -28,6 +25,6 @@ const Speaker2 = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
   );
 };
 
-useGLTF.preload("/models/Speakers2.glb");
+useGLTF.preload("/models/Speakers2_compressed.glb");
 
 export default Speaker2;

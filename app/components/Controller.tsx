@@ -49,6 +49,7 @@ const Controller = ({ position = [0, 0, 0], rotation = [0, 0, 0], onLabelChange 
     }
   }, [onLabelChange, position]);
 
+
   // Memoize only if gltf.scene exists
   const scene = useMemo(() => gltf?.scene?.clone?.(), [gltf?.scene]);
 

@@ -5,7 +5,7 @@ import { Object3D } from "three";
 
 
 const Stairway = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
-  const { scene } = useGLTF("/models/glass.glb");
+  const { scene } = useGLTF("/models/glass_compressed.glb");
   const speakerRef = useRef<Object3D | null>(null);
 
 
@@ -21,6 +21,6 @@ const Stairway = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
   );
 };
 
-useGLTF.preload("/models/glass.glb");
+useGLTF.preload("/models/glass_compressed.glb");
 
 export default Stairway;
