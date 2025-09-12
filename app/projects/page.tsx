@@ -31,8 +31,52 @@ export default function ProjectsPage() {
           msOverflowStyle: 'none', /* Internet Explorer 10+ */
         }}
       >
+      {/* Emergency Exit Button */}
+      <button
+        onClick={() => window.location.href = '/'}
+        style={{
+          position: 'absolute',
+          top: isMobile ? '10px' : '20px',
+          left: isMobile ? '5px' : '20px',
+          width: isMobile ? '40px' : '60px',
+          height: isMobile ? '40px' : '60px',
+          borderRadius: '50%',
+          border: '2px solid white',
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          display: 'flex',
+          alignItems: 'left',
+          justifyContent: 'left',
+          cursor: 'pointer',
+          transition: 'all 0.3s ease',
+          zIndex: 100,
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'scale(1.1)';
+          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 1)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'scale(1)';
+          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+        }}
+      >
+        <svg 
+          width={isMobile ? "25" : "40"} 
+          height={isMobile ? "25" : "40"} 
+          viewBox="0 0 24 24" 
+          fill="none" 
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path 
+            d="M12 17L7 12L12 7" 
+            stroke="#9333ea" 
+            strokeWidth="1.2" 
+            strokeLinecap="butt" 
+            strokeLinejoin="miter"
+          />
+        </svg>
+      </button>
       <div
-        className={`flex flex-col gap-4 md:gap-10 ${isMobile ? 'px-4' : 'ml-20 mr-10'}`}
+        className={`flex flex-col gap-4 md:gap-10 ${isMobile ? 'px-4 pt-12' : 'ml-20 mr-10 pt-12'}`}
         style={{
           scrollbarWidth: 'none', /* Firefox */
           msOverflowStyle: 'none', /* Internet Explorer 10+ */

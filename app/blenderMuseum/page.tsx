@@ -6,7 +6,19 @@ import { useEffect, useState } from "react";
 import DjokLogo from "../components/djokLogo";
 import MeLillyPad from "../components/MeLilyPad";
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 700 || /Mobi|Android/i.test(navigator.userAgent));
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+  return isMobile;
+}
+
 export default function BlenderMuseumPage() {
+  const isMobile = useIsMobile();
   const { active } = useProgress();
   const [showLoading, setShowLoading] = useState(true);
   const [minTimePassed, setMinTimePassed] = useState(false);
@@ -73,10 +85,54 @@ export default function BlenderMuseumPage() {
         </div>
       )}
 
-      <h1 className="absolute top-10 left-10 pointer-events-none">
+      {/* Emergency Exit Button */}
+      <button
+        onClick={() => window.location.href = '/'}
+        style={{
+          position: 'absolute',
+          top: isMobile ? '5px' : '20px',
+          left: isMobile ? '5px' : '20px',
+          width: isMobile ? '40px' : '60px',
+          height: isMobile ? '40px' : '60px',
+          borderRadius: '50%',
+          border: '2px solid white',
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          display: 'flex',
+          alignItems: 'left',
+          justifyContent: 'left',
+          cursor: 'pointer',
+          transition: 'all 0.3s ease',
+          zIndex: 100,
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'scale(1.1)';
+          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 1)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'scale(1)';
+          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+        }}
+      >
+        <svg 
+          width={isMobile ? "25" : "40"} 
+          height={isMobile ? "25" : "40"} 
+          viewBox="0 0 24 24" 
+          fill="none" 
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path 
+            d="M12 17L7 12L12 7" 
+            stroke="#9333ea" 
+            strokeWidth="1.2" 
+            strokeLinecap="butt" 
+            strokeLinejoin="miter"
+          />
+        </svg>
+      </button>
+      <h1 className={`absolute pointer-events-none ${isMobile ? 'top-12 left-4' : 'top-12 left-20'}`}>
         Blender museum
       </h1>
-      <Canvas className="absolute inset-0" camera={{ position: [0, 0, 5] }}>
+      <Canvas className="absolute inset-0" camera={{ position: [0, 0, 8] }}>
         <ambientLight intensity={1} />
         <directionalLight position={[2, 2, 2]} intensity={1} />
         <DjokLogo position={[0, 1, 0]} scale={1.5} />
