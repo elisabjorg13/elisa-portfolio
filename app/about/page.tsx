@@ -45,18 +45,18 @@ export default function AboutPage() {
           e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
         }}
       >
-        <svg 
-          width={isMobile ? "25" : "40"} 
-          height={isMobile ? "25" : "40"} 
-          viewBox="0 0 24 24" 
-          fill="none" 
+        <svg
+          width={isMobile ? "25" : "40"}
+          height={isMobile ? "25" : "40"}
+          viewBox="0 0 24 24"
+          fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path 
-            d="M12 17L7 12L12 7" 
-            stroke="#9333ea" 
-            strokeWidth="1.2" 
-            strokeLinecap="butt" 
+          <path
+            d="M12 17L7 12L12 7"
+            stroke="#9333ea"
+            strokeWidth="1.2"
+            strokeLinecap="butt"
             strokeLinejoin="miter"
           />
         </svg>
@@ -65,46 +65,13 @@ export default function AboutPage() {
         <div>
           <h1>About me</h1>
           <p>
-            I am a 22 yr old programmer and UX designer. I graduated with a
-            bachelors degree in software engineering from the University of
-            Iceland in June 2023, after taking my last semester abroad in
-            Madrid. I grew up in London but later moved to Iceland, where I am
-            situated now.
-          </p>
-        </div>
-        <div>
-          <h1>My work</h1>
-          <p>
-            During my time studying my degree, I found myself drawn to front end
-            design and programming, along with computer graphics. I also gained
-            a lot of interest in data visualisation when I took part in a
-            research project. Throughout my degree and beyond, I have developed
-            software for various companies. Over time, I became increasingly
-            involved in digital design as well. In the dynamic environment of
-            small startups, versatility is key, and I discovered the importance
-            of blending development skills with design knowledge. This hands-on
-            experience allowed me to refine my abilities in both areas.
-          </p>
-        </div>
-        <div>
-          <h1 >
-            Creative projects
-          </h1>
-          <p>
-            During my time studying my degree, I found myself drawn to front end
-            design and programming, along with computer graphics. I also gained
-            a lot of interest in data visualisation when I took part in a
-            research project. Throughout my degree and beyond, I have developed
-            software for various companies. Over time, I became increasingly
-            involved in digital design as well. In the dynamic environment of
-            small startups, versatility is key, and I discovered the importance
-            of blending development skills with design knowledge. This hands-on
-            experience allowed me to refine my abilities in both areas.
+            I&apos;m a junior software engineer from the University of Iceland. I currently work as a teacher in  computer science at Menntaskólinn í Reykjavík and collaborate on various programming projects. I DJ and produce music and perform at nightclubs in a duo called DJ ÓK.
+            I&apos;m at my best around people, building connections and collaborating, while staying organized, structured, and persistent. I work across the mediums of 3D, sound and interfaces.
+            My passion lies in the intersection of art and technology.
+
           </p>
         </div>
       </div>
-
-
     </main>
   );
 }
