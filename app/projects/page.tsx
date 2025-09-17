@@ -192,7 +192,7 @@ export default function ProjectsPage() {
                 <div className="flex flex-col gap-2">
                   <p>Method</p>
                   <p>
-                    Linear regression performed on data in order to calculate where to situate Pikkoló's next pick up stations.
+                    Linear regression performed on data in order to calculate where to situate Pikkoló&apos;s next pick up stations.
                     A dataset was created for the project, sourced from the geographic information
                     system of Reykjavik and the GPS system TomTom. Data
                     analyzation and Regression was performed using R and
