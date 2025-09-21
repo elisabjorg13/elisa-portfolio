@@ -121,7 +121,15 @@ const Scene = () => {
     audio.loop = true;
     audio.volume = 0.3; // Lower volume so it doesn't interfere
     
+    // Add attributes for better iOS compatibility
+    audio.setAttribute('playsinline', '');
+    audio.setAttribute('webkit-playsinline', '');
+    
     audio.addEventListener('canplaythrough', () => {
+      setAudioLoaded(true);
+    });
+    
+    audio.addEventListener('loadstart', () => {
       setAudioLoaded(true);
     });
     
@@ -130,6 +138,7 @@ const Scene = () => {
     return () => {
       audio.pause();
       audio.removeEventListener('canplaythrough', () => {});
+      audio.removeEventListener('loadstart', () => {});
     };
   }, []);
 
@@ -161,8 +170,24 @@ const Scene = () => {
       audioRef.current.pause();
       setIsPlaying(false);
     } else {
-      audioRef.current.play().catch(() => {});
-      setIsPlaying(true);
+      // For iOS, we need to ensure audio context is unlocked
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsPlaying(true);
+          })
+          .catch((error) => {
+            console.log('Audio play failed:', error);
+            // Try to unlock audio context on iOS
+            if (audioRef.current) {
+              audioRef.current.load();
+              setTimeout(() => {
+                audioRef.current?.play().then(() => setIsPlaying(true)).catch(() => {});
+              }, 100);
+            }
+          });
+      }
     }
   };
 
@@ -209,14 +234,29 @@ const Scene = () => {
       {/* Sound Toggle Button */}
       <button
         onClick={toggleAudio}
+        onTouchStart={(e) => {
+          e.preventDefault();
+          if (audioLoaded) {
+            e.currentTarget.style.transform = 'scale(0.95)';
+            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 1)';
+          }
+        }}
+        onTouchEnd={(e) => {
+          e.preventDefault();
+          if (audioLoaded) {
+            toggleAudio();
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+          }
+        }}
         disabled={!audioLoaded}
         style={{
           position: 'fixed',
           top: '20px',
           right: '20px',
           zIndex: 1000,
-          width: '100px',
-          height: '100px',
+          width: isMobile ? '80px' : '100px',
+          height: isMobile ? '80px' : '100px',
           borderRadius: '50%',
           border: '2px solid white',
           backgroundColor: 'rgba(255, 255, 255, 0.9)',
@@ -229,15 +269,18 @@ const Scene = () => {
           transition: 'all 0.3s ease',
           fontSize: '20px',
           fontFamily: "'Times New Roman', Times, serif",
+          WebkitTapHighlightColor: 'transparent',
+          touchAction: 'manipulation',
+          userSelect: 'none',
         }}
         onMouseEnter={(e) => {
-          if (audioLoaded) {
+          if (audioLoaded && !isMobile) {
             e.currentTarget.style.transform = 'scale(1.1)';
             e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 1)';
           }
         }}
         onMouseLeave={(e) => {
-          if (audioLoaded) {
+          if (audioLoaded && !isMobile) {
             e.currentTarget.style.transform = 'scale(1)';
             e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
           }
