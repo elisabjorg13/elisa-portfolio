@@ -3,7 +3,6 @@ import { useRef, useState, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import { Object3D, Bone } from "three";
-import { useRouter } from "next/navigation";
 import { Text } from "@react-three/drei";
 import { Html } from "@react-three/drei";
 
@@ -24,7 +23,6 @@ interface ModelProps {
   const bodyRef = useRef<Object3D | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isMobile, setIsMobile] = useState(false);
-  const router = useRouter();
   const [hovered, setHovered] = useState(false);
 
   // Call onLoad when model is ready
@@ -56,8 +54,9 @@ interface ModelProps {
     }
   }, [onLabelChange]);
 
-  const handleClick = () => {
-    router.push("/about");
+  const handleClick = (e: { stopPropagation: () => void }) => {
+    e.stopPropagation();
+    window.location.href = "/about";
   };
 
   useEffect(() => {
@@ -95,7 +94,7 @@ interface ModelProps {
     <>
       <primitive
         object={scene}
-        onClick={handleClick}
+        onPointerDown={handleClick}
         position={[-1.1, -2, -1]}
         rotation={[0,0.6,0]}
         scale={ 0.4}

@@ -2,7 +2,6 @@
 import { useRef, useState, useMemo, useEffect } from "react";
 import { useGLTF } from "@react-three/drei";
 import { Object3D} from "three";
-import { useRouter } from "next/navigation";
 import { Text } from "@react-three/drei";
 import { Html } from "@react-three/drei";
 
@@ -25,7 +24,6 @@ const Paper = ({ position = [0, 0, 0], rotation = [0, 0, 0], onLabelChange }: Pa
   const [isMobile, setIsMobile] = useState(false);
 
   const sceneClone = useMemo(() => scene.clone(), [scene]);
-  const router = useRouter();
 
   // Mobile detection
   useEffect(() => {
@@ -50,8 +48,9 @@ const Paper = ({ position = [0, 0, 0], rotation = [0, 0, 0], onLabelChange }: Pa
   }, [onLabelChange, position]);
 
 
-  const handleClick = () => {
-    router.push("/cv");
+  const handleClick = (e: { stopPropagation: () => void }) => {
+    e.stopPropagation();
+    window.location.href = "/cv";
   };
 
   return (
@@ -64,7 +63,7 @@ const Paper = ({ position = [0, 0, 0], rotation = [0, 0, 0], onLabelChange }: Pa
         scale={0.7}
         onPointerOver={() => setHovered(true)}
         onPointerOut={() => setHovered(false)}
-        onClick={handleClick}
+        onPointerDown={handleClick}
       />
       
       {/* Show numbered circle on mobile */}

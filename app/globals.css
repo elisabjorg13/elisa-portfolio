@@ -18,14 +18,17 @@
 }
 
 
+body,
+body *,
+body *::before,
+body *::after {
+  cursor: url('/images/fairyWandUP.png') 50 0, auto !important;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: 'Times New Roman', Times, serif;
-  cursor: url('/images/fairyWandUP.png') 50 0, auto;
-
-  /* 🪄 Add custom cursor */
-  /* cursor: pointer !important; */
 }
 h1 {
   color: #6A00FF;

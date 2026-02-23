@@ -3,7 +3,6 @@
 import { useGLTF } from "@react-three/drei";
 import { useRef, useState, useMemo, useEffect } from "react";
 import { Select } from "@react-three/postprocessing";
-import { useRouter } from "next/navigation";
 import { Text } from "@react-three/drei";
 import { Html } from "@react-three/drei";
 
@@ -21,7 +20,6 @@ interface ControllerProps {
 
 const Controller = ({ position = [0, 0, 0], rotation = [0, 0, 0], onLabelChange }: ControllerProps) => {
   const gltf = useGLTF("/models/computer2.glb");
-  const router = useRouter();
 
   const controllerRef = useRef(null);
   const [hovered, setHovered] = useState(false);
@@ -53,8 +51,9 @@ const Controller = ({ position = [0, 0, 0], rotation = [0, 0, 0], onLabelChange 
   // Memoize only if gltf.scene exists
   const scene = useMemo(() => gltf?.scene?.clone?.(), [gltf?.scene]);
 
-  const handleClick = () => {
-    router.push("/dj");
+  const handleClick = (e: { stopPropagation: () => void }) => {
+    e.stopPropagation();
+    window.location.href = "/dj";
   };
 
   // If the model hasn't loaded yet
@@ -65,7 +64,7 @@ const Controller = ({ position = [0, 0, 0], rotation = [0, 0, 0], onLabelChange 
       <>
         <primitive
           ref={controllerRef}
-          onClick={handleClick}
+          onPointerDown={handleClick}
           object={scene}
           position={position}
           rotation={rotation}

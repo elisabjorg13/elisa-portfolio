@@ -3,7 +3,6 @@
 import { useGLTF } from "@react-three/drei";
 import { useRef, useState, useMemo, useEffect } from "react";
 import { Select } from "@react-three/postprocessing";
-import { useRouter } from "next/navigation";
 import { Text } from "@react-three/drei";
 import { Html } from "@react-three/drei";
 
@@ -24,7 +23,6 @@ const BlenderMuseum = ({ position = [0, 0, 0], rotation = [0, 0, 0], onLabelChan
   const blenderRef = useRef(null);
   const [hovered, setHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const router = useRouter();
 
   // Mobile detection
   useEffect(() => {
@@ -51,8 +49,9 @@ const BlenderMuseum = ({ position = [0, 0, 0], rotation = [0, 0, 0], onLabelChan
   // Memoize only if gltf.scene exists
   const scene = useMemo(() => gltf?.scene?.clone?.(), [gltf?.scene]);
 
-  const handleClick = () => {
-    router.push("/blenderMuseum");
+  const handleClick = (e: { stopPropagation: () => void }) => {
+    e.stopPropagation();
+    window.location.href = "/blenderMuseum";
   };
 
   // If the model hasn't loaded yet
@@ -63,7 +62,7 @@ const BlenderMuseum = ({ position = [0, 0, 0], rotation = [0, 0, 0], onLabelChan
       <>
         <primitive
           ref={blenderRef}
-          onClick={handleClick}
+          onPointerDown={handleClick}
           object={scene}
           position={position}
           rotation={rotation}

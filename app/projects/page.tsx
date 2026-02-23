@@ -84,6 +84,54 @@ export default function ProjectsPage() {
         >
           <h1 className={isMobile ? "text-xl" : "text-3xl"}>Projects - Content</h1>
           <div>
+            <h2>Elysium & Katrinhersis: For You</h2>
+            <div className="flex flex-col gap-4 items-center">
+              <div className="flex flex-row gap-4 items-center">
+                <Image
+                  src="/images/Screenshot-2026-02-23-at-15.34.04.png"
+                  alt="For You mix poster"
+                  width={isMobile ? 200 : 300}
+                  height={isMobile ? 100 : 400}
+                  className=" h-auto"
+                />
+                <Image
+                  src="/images/Screenshot-2026-02-23-at-15.34.20.png"
+                  alt="For You mix player"
+                  width={isMobile ? 200 : 300}
+                  height={isMobile ? 100 : 400}
+                  className=" h-auto"
+                />
+                
+              </div>
+              <div className={`text-container text-justify flex flex-col gap-8 ${isMobile ? 'mr-8 ml-8' : 'ml-0 mr-24'}`}>
+                <div className="flex flex-col gap-2">
+                  <p>Sound design</p>
+                  <p>
+                    Mix for Egregore collective, based in Toulouse, France.
+                  </p>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <p>Method</p>
+                  <p>
+                    Linear regression performed on data in order to calculate where to situate Pikkoló&apos;s next pick up stations.
+                    A dataset was created for the project, sourced from the geographic information
+                    system of Reykjavik and the GPS system TomTom. Data
+                    analyzation and Regression was performed using R and
+                    mapped onto a map of Reykjavik.
+                  </p>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <p>Outcome</p>
+                  <p>
+                    Data visualisation created a simple and
+                    understandeable heatmap solution used for potential
+                    business opportunities.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
             <h2>Work From Home studios</h2>
             <p className={`text-container ${isMobile ? 'text-left' : 'mr-24'}`}>
               Work From Home Studios I cofounded with Katrín Hersisdóttir. It is a

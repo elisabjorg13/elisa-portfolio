@@ -7,11 +7,11 @@ export default function DJPage() {
   const router = useRouter();
   type TrackItem = {
     title: string;
-    link: string;
+    link?: string;
     stream: string;
     startTime?: number; // Start time in seconds
   };
-  const [menu, setMenu] = useState<'ELYSIUM' | 'DJ ÓK'>('ELYSIUM');
+  const [menu, setMenu] = useState<'ELYSIUM' | 'Mixes'>('Mixes');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [lastAngle, setLastAngle] = useState(0);
@@ -29,11 +29,15 @@ export default function DJPage() {
   
   const mixes = [
     {
-      title: "DJ örsi jersey club mix - Drif Radio",
-      link: "https://www.youtube.com/watch?v=eIiaiu_8EAc&list=RDeIiaiu_8EAc&start_radio=1&t=2307s",
+      title: "ELYSIUM & Katrinhersis: For You",
       stream:
-        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/Music/ytdl.canehill.info+-+DJ+O%CC%88RSI%CC%81+DRIF+(16+Jun+2024)+(320+KBps)-trimmed.mp3",
-      startTime: 1189, // Start at 19:39 (19*60 + 39 = 1179 seconds)
+        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/For_You_-_Elysium_Katrinhersis_Novembre_2025_KLICKAUD.mp3",
+    },
+    {
+      title: "ELYSIUM Promising young woman - Egregore",
+      link: "https://soundcloud.com/egreg-re/promising-young-woman-elysium-avril-2025?si=9354fd0dfd8a4ce0867cffbf63d747b5&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
+      stream:
+        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/Music/Promising+Young+Woman+-+Elysium+(Avril+2025)+(1).mp3",
     },
     {
       title: "DJ ÓK mix 002 - Drif Radio",
@@ -41,6 +45,20 @@ export default function DJPage() {
       stream:
         "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/Music/ytdl.canehill.info+-+DJ+O%CC%81K+DRIF+(14+Apr+2024)+(320+KBps)+(1)-trimmed.wav",
     },
+    {
+      title: "ELYSIUM Rich aunt mix",
+      link: "https://soundcloud.com/elysium-001/mixtest?si=6f390427c2634809925bd6ba3d3f6a01&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
+      stream:
+        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/Music/ELYSIUM+01+-+RICH+AUNT+MIX+(JERSEY+CLUB+SPECIAL).mp3",
+    },
+    {
+      title: "DJ örsi jersey club mix - Drif Radio",
+      link: "https://www.youtube.com/watch?v=eIiaiu_8EAc&list=RDeIiaiu_8EAc&start_radio=1&t=2307s",
+      stream:
+        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/Music/ytdl.canehill.info+-+DJ+O%CC%88RSI%CC%81+DRIF+(16+Jun+2024)+(320+KBps)-trimmed.mp3",
+      startTime: 1189, // Start at 19:39 (19*60 + 39 = 1179 seconds)
+    },
+
     {
       title: "DJ ÓK Drums pilled mix - Egregore",
       link: "https://soundcloud.com/egreg-re/dj-ok-drum-pilled-fevrier-2025?si=680048eb7ba9453baeec2e3be30692ee&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
@@ -55,18 +73,8 @@ export default function DJPage() {
         "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/Music/CellarMix.mp3",
       startTime: 45, // Start at 45 seconds
     },
-    {
-      title: "ELYSIUM Promising young woman - Egregore",
-      link: "https://soundcloud.com/egreg-re/promising-young-woman-elysium-avril-2025?si=9354fd0dfd8a4ce0867cffbf63d747b5&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
-      stream:
-        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/Music/Promising+Young+Woman+-+Elysium+(Avril+2025)+(1).mp3",
-    },
-    {
-      title: "ELYSIUM Rich aunt mix",
-      link: "https://soundcloud.com/elysium-001/mixtest?si=6f390427c2634809925bd6ba3d3f6a01&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
-      stream:
-        "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/Music/ELYSIUM+01+-+RICH+AUNT+MIX+(JERSEY+CLUB+SPECIAL).mp3",
-    },
+
+
   ];
   const tracks = [
     {
@@ -95,7 +103,7 @@ export default function DJPage() {
     },
   ];
   const currentList = menu === 'ELYSIUM' ? tracks : mixes;
-  const [currentItem, setCurrentItem] = useState<TrackItem>(tracks[0]);
+  const [currentItem, setCurrentItem] = useState<TrackItem>(mixes[0]);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -267,11 +275,11 @@ export default function DJPage() {
           {/* Left menu */}
           <div className="basis-1/3 flex flex-col">
             <div
-              className={`px-4 py-2 cursor-pointer rounded-md mb-2 flex items-center justify-between text-sm md:text-base ${menu === 'ELYSIUM' ? 'bg-customBlue text-white font-bold' : ''}`}
-              onClick={() => setMenu('ELYSIUM')}
+              className={`px-4 py-2 cursor-pointer rounded-md mb-2 flex items-center justify-between text-sm md:text-base ${menu === 'Mixes' ? 'bg-customBlue text-white font-bold' : ''}`}
+              onClick={() => setMenu('Mixes')}
             >
-              ELYSIUM
-              {menu === 'ELYSIUM' && (
+              Mixes
+              {menu === 'Mixes' && (
                 <svg
                   width={14}
                   height={14}
@@ -285,11 +293,11 @@ export default function DJPage() {
               )}
             </div>
             <div
-              className={`px-4 py-2 cursor-pointer rounded-md flex items-center justify-between text-sm md:text-base ${menu === 'DJ ÓK' ? 'bg-customBlue text-white font-bold' : ''}`}
-              onClick={() => setMenu('DJ ÓK')}
+              className={`px-4 py-2 cursor-pointer rounded-md flex items-center justify-between text-sm md:text-base ${menu === 'ELYSIUM' ? 'bg-customBlue text-white font-bold' : ''}`}
+              onClick={() => setMenu('ELYSIUM')}
             >
-              DJ ÓK
-              {menu === 'DJ ÓK' && (
+              ELYSIUM
+              {menu === 'ELYSIUM' && (
                 <svg
                   width={14}
                   height={14}
@@ -340,16 +348,16 @@ export default function DJPage() {
               className={`w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center shadow font-bold text-[8px] md:text-xs absolute left-0 top-4 z-10 p-1 md:p-3
                 ${menu === 'ELYSIUM'
                   ? 'bg-[#f8f8f8] border-2 border-customBlue text-customBlue hover:bg-customBlue hover:text-white transition-colors cursor-pointer font-serif'
-                  : menu === 'DJ ÓK'
+                  : menu === 'Mixes'
                   ? 'bg-[#f8f8f8] border-2 border-customBlue text-customBlue hover:bg-customBlue hover:text-white transition-colors cursor-pointer font-serif'
                   : 'bg-[#f8f8f8] border-2 border-[#e0e0e0] text-gray-400 hover:border-gray-400 hover:text-gray-500 transition-colors font-serif'}
               `}
-              style={{ transform: 'translate(-50%, 0)', textTransform: 'uppercase', letterSpacing: '0.1em', pointerEvents: menu === 'ELYSIUM' || menu === 'DJ ÓK' ? 'auto' : 'none' }}
+              style={{ transform: 'translate(-50%, 0)', textTransform: 'uppercase', letterSpacing: '0.1em', pointerEvents: menu === 'ELYSIUM' || menu === 'Mixes' ? 'auto' : 'none' }}
               onClick={(e) => {
                 e.stopPropagation(); // Prevent wheel rotation when clicking buttons
                 if (menu === 'ELYSIUM') {
                   window.open('https://www.instagram.com/', '_blank');
-                } else if (menu === 'DJ ÓK') {
+                } else if (menu === 'Mixes') {
                   window.open('https://www.instagram.com/djokokokokokok/', '_blank');
                 }
               }}
@@ -360,16 +368,16 @@ export default function DJPage() {
               className={`w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center shadow font-bold text-[8px] md:text-xs absolute right-0 top-4 z-10 p-1 md:p-3
                 ${menu === 'ELYSIUM'
                   ? 'bg-[#f8f8f8] border-2 border-customBlue text-customBlue hover:bg-customBlue hover:text-white transition-colors cursor-pointer font-serif'
-                  : menu === 'DJ ÓK'
+                  : menu === 'Mixes'
                   ? 'bg-[#f8f8f8] border-2 border-customBlue text-customBlue hover:bg-customBlue hover:text-white transition-colors cursor-pointer font-serif'
                   : 'bg-[#f8f8f8] border-2 border-[#e0e0e0] text-gray-400 hover:border-gray-400 hover:text-gray-500 transition-colors font-serif'}
               `}
-              style={{ transform: 'translate(50%, 0)', textTransform: 'uppercase', letterSpacing: '0.1em', pointerEvents: menu === 'ELYSIUM' || menu === 'DJ ÓK' ? 'auto' : 'none' }}
+              style={{ transform: 'translate(50%, 0)', textTransform: 'uppercase', letterSpacing: '0.1em', pointerEvents: menu === 'ELYSIUM' || menu === 'Mixes' ? 'auto' : 'none' }}
               onClick={(e) => {
                 e.stopPropagation(); // Prevent wheel rotation when clicking buttons
                 if (menu === 'ELYSIUM') {
                   window.open('https://soundcloud.com/elysium-001', '_blank');
-                } else if (menu === 'DJ ÓK') {
+                } else if (menu === 'Mixes') {
                   window.open('https://soundcloud.com/djok-889666396', '_blank');
                 }
               }}

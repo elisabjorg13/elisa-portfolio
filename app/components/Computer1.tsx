@@ -2,7 +2,6 @@
 import {useRef, useState, useEffect } from "react";
 import { useGLTF } from "@react-three/drei";
 import { Object3D } from "three";
-import { useRouter } from "next/navigation";
 import { Text } from "@react-three/drei";
 import { Html } from "@react-three/drei";
 
@@ -24,7 +23,6 @@ interface Computer1Props {
   const speakerRef = useRef<Object3D | null>(null);
   const [hovered, setHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const router = useRouter();
 
   // Call onLoad when model is ready
   useEffect(() => {
@@ -55,8 +53,9 @@ interface Computer1Props {
     }
   }, [onLabelChange, position]);
 
-  const handleClick = () => {
-    router.push("/projects");
+  const handleClick = (e: { stopPropagation: () => void }) => {
+    e.stopPropagation();
+    window.location.href = "/projects";
   };
 
   return (
@@ -67,7 +66,7 @@ interface Computer1Props {
         position={position}
         rotation={rotation}
         scale={0.6}
-        onClick={handleClick}
+        onPointerDown={handleClick}
         onPointerOver={() => setHovered(true)}
         onPointerOut={() => setHovered(false)}
       />
