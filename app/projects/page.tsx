@@ -18,12 +18,26 @@ function useIsMobile() {
 
 export default function ProjectsPage() {
   const isMobile = useIsMobile();
+  const mainRef = useRef<HTMLElement | null>(null);
   const visualsVideoRef = useRef<HTMLVideoElement | null>(null);
+  const ladiesRunVideoRef = useRef<HTMLVideoElement | null>(null);
+  const ladiesRunSecondVideoRef = useRef<HTMLVideoElement | null>(null);
+  const ladiesRunHelltimeVideoRef = useRef<HTMLVideoElement | null>(null);
+  const ladiesRunEggRitualVideoRef = useRef<HTMLVideoElement | null>(null);
+  const ladiesRunStrudelVideoRef = useRef<HTMLVideoElement | null>(null);
   const suskinLandingVideoRef = useRef<HTMLVideoElement | null>(null);
   const suskinShoppingVideoRef = useRef<HTMLVideoElement | null>(null);
   const suskinLandingSecondaryVideoRef = useRef<HTMLVideoElement | null>(null);
   const elisabjorgMockupVideoRef = useRef<HTMLVideoElement | null>(null);
   const [isVisualsSoundOn, setIsVisualsSoundOn] = useState(false);
+  const [isLadiesRunSoundOn, setIsLadiesRunSoundOn] = useState(false);
+  const [isLadiesRunSecondSoundOn, setIsLadiesRunSecondSoundOn] = useState(false);
+  const [isLadiesRunHelltimeSoundOn, setIsLadiesRunHelltimeSoundOn] =
+    useState(false);
+  const [isLadiesRunEggRitualSoundOn, setIsLadiesRunEggRitualSoundOn] =
+    useState(false);
+  const [isLadiesRunStrudelSoundOn, setIsLadiesRunStrudelSoundOn] =
+    useState(false);
   const [isSuskinLandingSoundOn, setIsSuskinLandingSoundOn] = useState(false);
   const [isSuskinShoppingSoundOn, setIsSuskinShoppingSoundOn] = useState(false);
   const [isSuskinLandingSecondarySoundOn, setIsSuskinLandingSecondarySoundOn] =
@@ -44,6 +58,81 @@ export default function ProjectsPage() {
     }
 
     setIsVisualsSoundOn(!video.muted);
+  };
+
+  const toggleLadiesRunVideoSound = () => {
+    if (!ladiesRunVideoRef.current) return;
+
+    const video = ladiesRunVideoRef.current;
+    video.muted = !video.muted;
+    video.volume = 0.7;
+
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {});
+    }
+
+    setIsLadiesRunSoundOn(!video.muted);
+  };
+
+  const toggleLadiesRunSecondVideoSound = () => {
+    if (!ladiesRunSecondVideoRef.current) return;
+
+    const video = ladiesRunSecondVideoRef.current;
+    video.muted = !video.muted;
+    video.volume = 0.7;
+
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {});
+    }
+
+    setIsLadiesRunSecondSoundOn(!video.muted);
+  };
+
+  const toggleLadiesRunHelltimeVideoSound = () => {
+    if (!ladiesRunHelltimeVideoRef.current) return;
+
+    const video = ladiesRunHelltimeVideoRef.current;
+    video.muted = !video.muted;
+    video.volume = 0.7;
+
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {});
+    }
+
+    setIsLadiesRunHelltimeSoundOn(!video.muted);
+  };
+
+  const toggleLadiesRunEggRitualVideoSound = () => {
+    if (!ladiesRunEggRitualVideoRef.current) return;
+
+    const video = ladiesRunEggRitualVideoRef.current;
+    video.muted = !video.muted;
+    video.volume = 0.7;
+
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {});
+    }
+
+    setIsLadiesRunEggRitualSoundOn(!video.muted);
+  };
+
+  const toggleLadiesRunStrudelVideoSound = () => {
+    if (!ladiesRunStrudelVideoRef.current) return;
+
+    const video = ladiesRunStrudelVideoRef.current;
+    video.muted = !video.muted;
+    video.volume = 0.7;
+
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {});
+    }
+
+    setIsLadiesRunStrudelSoundOn(!video.muted);
   };
 
   const toggleSuskinLandingVideoSound = () => {
@@ -106,6 +195,80 @@ export default function ProjectsPage() {
     setIsElisabjorgMockupSoundOn(!video.muted);
   };
 
+  useEffect(() => {
+    if (!mainRef.current) return;
+
+    const videos = Array.from(
+      mainRef.current.querySelectorAll("video"),
+    ) as HTMLVideoElement[];
+
+    const MIN_VISIBLE_RATIO = 0.25;
+
+    const updateFocusedPlayback = () => {
+      const viewportHeight = window.innerHeight;
+      const viewportCenter = viewportHeight / 2;
+
+      let focusedVideo: HTMLVideoElement | null = null;
+      let closestDistance = Number.POSITIVE_INFINITY;
+
+      for (const video of videos) {
+        const rect = video.getBoundingClientRect();
+        const visiblePixels =
+          Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0);
+        const visibleRatio = visiblePixels / Math.max(rect.height, 1);
+
+        if (visibleRatio < MIN_VISIBLE_RATIO) {
+          if (!video.paused) video.pause();
+          continue;
+        }
+
+        const videoCenter = rect.top + rect.height / 2;
+        const distanceToCenter = Math.abs(videoCenter - viewportCenter);
+
+        if (distanceToCenter < closestDistance) {
+          closestDistance = distanceToCenter;
+          focusedVideo = video;
+        }
+      }
+
+      for (const video of videos) {
+        if (video === focusedVideo) {
+          const playPromise = video.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(() => {});
+          }
+        } else if (!video.paused) {
+          video.pause();
+        }
+      }
+    };
+
+    let rafId: number | null = null;
+    const scheduleUpdate = () => {
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
+      rafId = window.requestAnimationFrame(() => {
+        rafId = null;
+        updateFocusedPlayback();
+      });
+    };
+
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+    document.addEventListener("visibilitychange", scheduleUpdate);
+    scheduleUpdate();
+
+    return () => {
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+      document.removeEventListener("visibilitychange", scheduleUpdate);
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
+    };
+  }, []);
+
   return (
     <>
       <style jsx>{`
@@ -128,6 +291,7 @@ export default function ProjectsPage() {
         }
       `}</style>
       <main
+        ref={mainRef}
         className={`h-screen w-full mx-auto flex flex-col items-center justify-start mt-2 md:mt-4 gap-10 md:gap-20 cursor-pointer ${isMobile ? "text-sm" : "text-base"} pb-20`}
         style={{
           scrollbarWidth: "none" /* Firefox */,
@@ -192,6 +356,235 @@ export default function ProjectsPage() {
           </h1>
           <div className="flex flex-col gap-10">
             <div></div>
+            <div className="flex flex-col gap-10">
+            <h2>Ladies run, there's an egg in the rose garden</h2>
+            <p className="text-container">
+              Work From Home Studios I cofounded with Katrín Hersisdóttir. It is
+              a web design studio where I implement websites for various brands
+              and artists.
+            </p>
+            <div
+              className={`flex flex-col mt-4 gap-4 ${isMobile ? "text-left" : ""}`}
+            >
+              <div
+                className={`flex flex-col gap-8 ${isMobile ? "items-center w-full" : "items-center"}`}
+              >
+                <div className="relative">
+                  <video
+                    ref={ladiesRunVideoRef}
+                    src="https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/content-portfolio/wrld/ladies+run+home-audio.mp4"
+                    width={isMobile ? 300 : 900}
+                    height={isMobile ? 200 : 700}
+                    className="h-auto rounded-md shadow-lg border border-gray-200 "
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    controls={false}
+                  />
+                  <button
+                    onClick={toggleLadiesRunVideoSound}
+                    aria-label={
+                      isLadiesRunSoundOn ? "Mute video" : "Unmute video"
+                    }
+                    className="absolute right-2 top-2 z-10 transition-transform duration-300 hover:scale-105"
+                    style={{
+                      width: isMobile ? "28px" : "60px",
+                      height: isMobile ? "28px" : "60px",
+                      background: "transparent",
+                      border: "none",
+                      padding: 0,
+                      cursor: "pointer",
+                    }}
+                  >
+                    <img
+                      src={
+                        isLadiesRunSoundOn
+                          ? "/images/speaker_icon_black.png"
+                          : "/images/speaker_icon_sound_off.png"
+                      }
+                      alt={isLadiesRunSoundOn ? "Sound On" : "Sound Off"}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    />
+                  </button>
+                </div>
+                <div className="relative">
+                  <video
+                    ref={ladiesRunSecondVideoRef}
+                    src="https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/content-portfolio/wrld/lobbytime.mp4"
+                    width={isMobile ? 300 : 900}
+                    height={isMobile ? 200 : 700}
+                    className="h-auto h-auto rounded-md shadow-lg border border-gray-200"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    controls={false}
+                  />
+                  <button
+                    onClick={toggleLadiesRunSecondVideoSound}
+                    aria-label={
+                      isLadiesRunSecondSoundOn ? "Mute video" : "Unmute video"
+                    }
+                    className="absolute right-2 top-2 z-10 transition-transform duration-300 hover:scale-105"
+                    style={{
+                      width: isMobile ? "28px" : "60px",
+                      height: isMobile ? "28px" : "60px",
+                      background: "transparent",
+                      border: "none",
+                      padding: 0,
+                      cursor: "pointer",
+                    }}
+                  >
+                    <img
+                      src={
+                        isLadiesRunSecondSoundOn
+                          ? "/images/speaker_icon_black.png"
+                          : "/images/speaker_icon_sound_off.png"
+                      }
+                      alt={isLadiesRunSecondSoundOn ? "Sound On" : "Sound Off"}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    />
+                  </button>
+                </div>
+                <div className="relative">
+                  <video
+                    ref={ladiesRunHelltimeVideoRef}
+                    src="https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/content-portfolio/wrld/helltime.mp4"
+                    width={isMobile ? 300 : 900}
+                    height={isMobile ? 200 : 700}
+                    className="h-auto h-auto rounded-md shadow-lg border border-gray-200"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    controls={false}
+                  />
+                  <button
+                    onClick={toggleLadiesRunHelltimeVideoSound}
+                    aria-label={
+                      isLadiesRunHelltimeSoundOn ? "Mute video" : "Unmute video"
+                    }
+                    className="absolute right-2 top-2 z-10 transition-transform duration-300 hover:scale-105"
+                    style={{
+                      width: isMobile ? "28px" : "60px",
+                      height: isMobile ? "28px" : "60px",
+                      background: "transparent",
+                      border: "none",
+                      padding: 0,
+                      cursor: "pointer",
+                    }}
+                  >
+                    <img
+                      src={
+                        isLadiesRunHelltimeSoundOn
+                          ? "/images/speaker_icon_black.png"
+                          : "/images/speaker_icon_sound_off.png"
+                      }
+                      alt={isLadiesRunHelltimeSoundOn ? "Sound On" : "Sound Off"}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    />
+                  </button>
+                </div>
+                <div className="relative">
+                  <video
+                    ref={ladiesRunEggRitualVideoRef}
+                    src="https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/content-portfolio/wrld/eggritualgo.mp4"
+                    width={isMobile ? 300 : 900}
+                    height={isMobile ? 200 : 700}
+                    className="h-auto h-auto rounded-md shadow-lg border border-gray-200"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    controls={false}
+                  />
+                  <button
+                    onClick={toggleLadiesRunEggRitualVideoSound}
+                    aria-label={
+                      isLadiesRunEggRitualSoundOn ? "Mute video" : "Unmute video"
+                    }
+                    className="absolute right-2 top-2 z-10 transition-transform duration-300 hover:scale-105"
+                    style={{
+                      width: isMobile ? "28px" : "60px",
+                      height: isMobile ? "28px" : "60px",
+                      background: "transparent",
+                      border: "none",
+                      padding: 0,
+                      cursor: "pointer",
+                    }}
+                  >
+                    <img
+                      src={
+                        isLadiesRunEggRitualSoundOn
+                          ? "/images/speaker_icon_black.png"
+                          : "/images/speaker_icon_sound_off.png"
+                      }
+                      alt={
+                        isLadiesRunEggRitualSoundOn ? "Sound On" : "Sound Off"
+                      }
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    />
+                  </button>
+                </div>
+                <div className="relative overflow-hidden rounded-md shadow-lg border border-gray-200">
+                  <video
+                    ref={ladiesRunStrudelVideoRef}
+                    src="https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/content-portfolio/wrld/strudel+video.mov"
+                    width={isMobile ? 300 : 900}
+                    height={isMobile ? 200 : 560}
+                    className="h-auto block"
+                    style={{ transform: "scale(1.02)", transformOrigin: "center" }}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    controls={false}
+                  />
+                  <button
+                    onClick={toggleLadiesRunStrudelVideoSound}
+                    aria-label={
+                      isLadiesRunStrudelSoundOn ? "Mute video" : "Unmute video"
+                    }
+                    className="absolute right-2 top-2 z-10 transition-transform duration-300 hover:scale-105"
+                    style={{
+                      width: isMobile ? "28px" : "60px",
+                      height: isMobile ? "28px" : "60px",
+                      background: "transparent",
+                      border: "none",
+                      padding: 0,
+                      cursor: "pointer",
+                    }}
+                  >
+                    <img
+                      src={
+                        isLadiesRunStrudelSoundOn
+                          ? "/images/speaker_icon_black.png"
+                          : "/images/speaker_icon_sound_off.png"
+                      }
+                      alt={isLadiesRunStrudelSoundOn ? "Sound On" : "Sound Off"}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
             <div className="flex flex-col gap-10 w-full max-w-[600px] mx-auto">
               <h2>MSRS</h2>
               <p className="text-container">
@@ -716,47 +1109,6 @@ export default function ProjectsPage() {
                     heatmap solution used for potential business opportunities.
                   </p>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div>
-            <h2>InkUp</h2>
-            <div className="flex flex-col gap-4 items-center">
-              <div className="flex flex-row gap-4 items-center">
-                <Image
-                  src="/images/inkUp1.png" // Must be in the public/ folder
-                  alt="Magic Wand"
-                  width={isMobile ? 100 : 200}
-                  height={isMobile ? 200 : 400}
-                  className="h-auto"
-                />
-                <Image
-                  src="/images/inkUp2.png" // Must be in the public/ folder
-                  alt="Magic Wand"
-                  width={isMobile ? 100 : 200}
-                  height={isMobile ? 200 : 400}
-                  className=" h-auto"
-                />
-              </div>
-              <div className="text-container text-justify flex flex-col gap-8 mb-8">
-                <p className="">
-                  Entrepreneurially focused course project in the University of
-                  Iceland. InkUp is a platform that connects tattoo artists to
-                  potential customers in order to increase the visibility of the
-                  tattoo industry.
-                </p>
-                <p>
-                  In the course I took in Iceland I made a business model for
-                  inkUp along with a business pitch that was pitched to
-                  investors. I continued the project in Madrid when I took
-                  another similar course, Thus re-iterating the business model
-                  and pitch, after getting potential clients to take a number of
-                  surveys in order to aquire deeper knowledge on inkUp&apos;s
-                  target market. I also designed the whole front end logic for
-                  the application using Figma and using a mock database,
-                  implemented a mock version of the application using Adalo,
-                  which is accesible here.
-                </p>
               </div>
             </div>
           </div>
