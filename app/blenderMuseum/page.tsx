@@ -1,8 +1,9 @@
 "use client";
 
-import { Canvas } from "@react-three/fiber";
-import { useProgress } from "@react-three/drei";
-import { useEffect, useState } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { useGLTF, useProgress } from "@react-three/drei";
+import { useEffect, useRef, useState } from "react";
+import { Object3D } from "three";
 import DjokLogo from "../components/djokLogo";
 import MeLillyPad from "../components/MeLilyPad";
 
@@ -16,6 +17,56 @@ function useIsMobile() {
   }, []);
   return isMobile;
 }
+
+type MuseumModelProps = {
+  url: string;
+  position: [number, number, number];
+  rotation?: [number, number, number];
+  scale?: number;
+};
+
+function MuseumModel({
+  url,
+  position,
+  rotation = [0, 0, 0],
+  scale = 1,
+}: MuseumModelProps) {
+  const ref = useRef<Object3D>(null!);
+  const { scene } = useGLTF(url);
+
+  useFrame(() => {
+    if (ref.current) {
+      // Match the same simple spin style as other museum models.
+      ref.current.rotation.y += 0.01;
+    }
+  });
+
+  return (
+    <primitive
+      ref={ref}
+      object={scene}
+      position={position}
+      rotation={rotation}
+      scale={[scale, scale, scale]}
+    />
+  );
+}
+
+const COMPRESSED_MODELS: MuseumModelProps[] = [
+  // Top row
+  { url: "/models/beanieegg_compressed.glb", position: [-8.4, -11, -4], scale: 1.2 },
+  { url: "/models/tophategg_compressed.glb", position: [0.0, 6.0, -3.6], scale: 1.55 },
+  { url: "/models/eggchair_compressed.glb", position: [9, -3, -5], scale: 1.5 },
+  // Row 2
+  { url: "/models/cake_compressed.glb", position: [-5.4, -5.3, 1], scale: 0.34 },
+  { url: "/models/eggbow_compressed.glb", position: [7.8, 5.8, -3], scale: 1.55 },
+  // Row 3
+  { url: "/models/fedoraegg_compressed.glb", position: [-8.4, -2.2, -3.9], scale: 1.45 },
+  { url: "/models/Speakers_new_compressed.glb", position: [-9, 6, -4.2], scale: 0.78 },
+  // Row 4
+  { url: "/models/moi_compressed.glb", position: [0, -10, -4.1], scale: 2.5 },
+  { url: "/models/santaegg_compressed.glb", position: [8.6, -8, -4.2], scale: 1.6 },
+];
 
 export default function BlenderMuseumPage() {
   const isMobile = useIsMobile();
@@ -123,7 +174,7 @@ export default function BlenderMuseumPage() {
           <path 
             d="M12 17L7 12L12 7" 
             stroke="#9333ea" 
-            strokeWidth="1.2" 
+            strokeWidth="1.2"  
             strokeLinecap="butt" 
             strokeLinejoin="miter"
           />
@@ -132,11 +183,20 @@ export default function BlenderMuseumPage() {
       <h1 className={`absolute pointer-events-none ${isMobile ? 'top-12 left-4' : 'top-12 left-20'}`}>
         Blender museum
       </h1>
-      <Canvas className="absolute inset-0" camera={{ position: [0, 0, 8] }}>
+      <Canvas className="absolute inset-0" camera={{ position: [0, 0, 13] }}>
         <ambientLight intensity={1} />
         <directionalLight position={[2, 2, 2]} intensity={1} />
-        <DjokLogo position={[0, 1, 0]} scale={1.5} />
-        <MeLillyPad position={[0, -2, 0]} rotation={[0, Math.PI, 0]} scale={0.15}  />
+        <DjokLogo position={[0, 2.2, -4.0]} scale={1.65} />
+        <MeLillyPad position={[0, -2.2, -4.0]} rotation={[0, Math.PI, 0]} scale={0.17}  />
+        {COMPRESSED_MODELS.map((model) => (
+          <MuseumModel
+            key={model.url}
+            url={model.url}
+            position={model.position}
+            rotation={model.rotation}
+            scale={model.scale}
+          />
+        ))}
       </Canvas>
 
       {/* Optional overlay text */}
