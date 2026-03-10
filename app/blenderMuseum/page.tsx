@@ -70,7 +70,7 @@ const COMPRESSED_MODELS: MuseumModelProps[] = [
 
 export default function BlenderMuseumPage() {
   const isMobile = useIsMobile();
-  const { active } = useProgress();
+  const { active, loaded } = useProgress();
   const [showLoading, setShowLoading] = useState(true);
   const [minTimePassed, setMinTimePassed] = useState(false);
 
@@ -85,12 +85,13 @@ export default function BlenderMuseumPage() {
   }, [active]);
 
   useEffect(() => {
-    if (!active && minTimePassed) {
+    // Progressive loading: hide overlay once at least one asset is ready.
+    if (loaded > 0 && minTimePassed) {
       setShowLoading(false);
-    } else if (active) {
+    } else if (active && loaded === 0) {
       setShowLoading(true);
     }
-  }, [active, minTimePassed]);
+  }, [active, loaded, minTimePassed]);
 
   return (
     <main className="relative w-screen h-screen overflow-hidden bg-white cursor-pointer">
