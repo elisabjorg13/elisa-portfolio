@@ -29,6 +29,7 @@ export default function ProjectsPage() {
   const suskinShoppingVideoRef = useRef<HTMLVideoElement | null>(null);
   const suskinLandingSecondaryVideoRef = useRef<HTMLVideoElement | null>(null);
   const elisabjorgMockupVideoRef = useRef<HTMLVideoElement | null>(null);
+  const forYouAudioRef = useRef<HTMLAudioElement | null>(null);
   const [isVisualsSoundOn, setIsVisualsSoundOn] = useState(false);
   const [isLadiesRunSoundOn, setIsLadiesRunSoundOn] = useState(false);
   const [isLadiesRunSecondSoundOn, setIsLadiesRunSecondSoundOn] =
@@ -45,6 +46,17 @@ export default function ProjectsPage() {
     useState(false);
   const [isElisabjorgMockupSoundOn, setIsElisabjorgMockupSoundOn] =
     useState(false);
+  const [forYouCurrentTime, setForYouCurrentTime] = useState(0);
+  const [forYouDuration, setForYouDuration] = useState(0);
+  const [isForYouPlaying, setIsForYouPlaying] = useState(false);
+
+  const FOR_YOU_MIX_URL =
+    "https://portfolio-elisa-2023.s3.eu-west-1.amazonaws.com/For_You_-_Elysium_Katrinhersis_Novembre_2025_KLICKAUD.mp3";
+  const FOR_YOU_CHAPTERS = [
+    { label: "19:14", time: 1154 },
+    { label: "30:20", time: 1820 },
+    { label: "42:15", time: 2535 },
+  ];
 
   const toggleVisualsVideoSound = () => {
     if (!visualsVideoRef.current) return;
@@ -194,6 +206,41 @@ export default function ProjectsPage() {
     }
 
     setIsElisabjorgMockupSoundOn(!video.muted);
+  };
+
+  const toggleForYouPlayback = () => {
+    if (!forYouAudioRef.current) return;
+    const audio = forYouAudioRef.current;
+    if (!audio.paused) {
+      audio.pause();
+      return;
+    }
+    // Always start from the beginning on Play.
+    audio.currentTime = 0;
+    audio.playbackRate = 1;
+    setForYouCurrentTime(0);
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {});
+    }
+  };
+
+  const seekForYouMix = (time: number) => {
+    if (!forYouAudioRef.current) return;
+    const audio = forYouAudioRef.current;
+    const duration = Number.isFinite(audio.duration) ? audio.duration : 0;
+    const clampedTime = Math.max(0, Math.min(time, duration || time));
+    audio.currentTime = clampedTime;
+    setForYouCurrentTime(clampedTime);
+  };
+
+  const jumpToForYouChapter = (time: number) => {
+    if (!forYouAudioRef.current) return;
+    seekForYouMix(time);
+    const playPromise = forYouAudioRef.current.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {});
+    }
   };
 
   useEffect(() => {
@@ -680,7 +727,7 @@ export default function ProjectsPage() {
             </p>
             <p className="text-container text-justify">
               <span className="text-customPurple">Description:</span> Live
-              performace graduation project for the Icelandic Academy of the
+              performace graduation project by Marta Ákadóttir for the Icelandic Academy of the
               Arts. I created the soundscape for the performance by live mixing
               miscellaneous audioclips we sat on, one of them being an hour long
               audio recording of a mosquito in a jar. Whole performance
@@ -792,7 +839,7 @@ export default function ProjectsPage() {
             <h2 className={isMobile ? "text-lg" : "text-2xl"}>Visuals RVK X</h2>
             <p>
               <span className="text-customPurple">Project type:</span> Live
-              visuals
+              visuals - Ever siince I was young I knew I wanted to change the song
             </p>
             <p>
               <span className="text-customPurple">Tools:</span> Touchdesigner
@@ -896,6 +943,63 @@ export default function ProjectsPage() {
               </a>
               .
             </p>
+            <div className="w-full max-w-[900px] flex flex-col gap-3">
+              <p>Or listen to timestamps</p>
+              <audio
+                ref={forYouAudioRef}
+                src={FOR_YOU_MIX_URL}
+                preload="metadata"
+                onLoadedMetadata={(e) => {
+                  const duration = Number.isFinite(e.currentTarget.duration)
+                    ? e.currentTarget.duration
+                    : 0;
+                  setForYouDuration(duration);
+                }}
+                onTimeUpdate={(e) => {
+                  setForYouCurrentTime(e.currentTarget.currentTime);
+                }}
+                onPlay={() => setIsForYouPlaying(true)}
+                onPause={() => setIsForYouPlaying(false)}
+                onEnded={() => setIsForYouPlaying(false)}
+                onRateChange={(e) => {
+                  if (e.currentTarget.playbackRate !== 1) {
+                    e.currentTarget.playbackRate = 1;
+                  }
+                }}
+              />
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={toggleForYouPlayback}
+                  className="text-customPurple text-sm hover:underline"
+                  aria-label={isForYouPlaying ? "Pause mix" : "Play mix from start"}
+                  type="button"
+                >
+                  {isForYouPlaying ? "Pause" : "Play"}
+                </button>
+                <input
+                  type="range"
+                  min={0}
+                  max={forYouDuration || 1}
+                  step={0.1}
+                  value={Math.min(forYouCurrentTime, forYouDuration || 1)}
+                  readOnly
+                  className="w-full accent-[#8B5CF6]"
+                  aria-label="For You mix progress"
+                />
+              </div>
+              <div className="flex items-center gap-4 text-sm text-customPurple">
+                {FOR_YOU_CHAPTERS.map((chapter) => (
+                  <button
+                    key={chapter.time}
+                    onClick={() => jumpToForYouChapter(chapter.time)}
+                    className="hover:underline"
+                    type="button"
+                  >
+                    {chapter.label}
+                  </button>
+                ))}
+              </div>
+            </div>
             <div className="flex flex-col gap-4 items-center">
               <div className="flex flex-row gap-10 items-center">
                 <div className="">
